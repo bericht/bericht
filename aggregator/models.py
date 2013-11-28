@@ -82,7 +82,7 @@ class Feed(models.Model):
             defaults={
                 'title': parsed.feed.title,
                 'link': parsed.feed.link,
-                # TODO: sanitize html (XSS,..)
+                # @TODO: sanitize html (XSS,..)
                 'description': parsed.feed.description,
                 'updated_at': now()
             })
