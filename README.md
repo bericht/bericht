@@ -16,11 +16,11 @@ Usage of [virtalenv](https://pypi.python.org/pypi/virtualenv) is strongly
 recommended! Currently, Bericht needs python 2 because mezzanine has not
 been ported to python 3 so far.
 
-1. Install the requirements:
+Install the requirements:
 
     pip install -r requirements/project.txt
 
-2. Create a local_settings.py file:
+Create a local_settings.py file:
 
     DEBUG = True
     TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
@@ -31,12 +31,12 @@ been ported to python 3 so far.
         }
     }
 
-3. Initialize the database:
+Initialize the database:
 
     python manage.py createdb --nodata
 
-4. Run the development server:
+Run the development server:
 
     python manage.py runserver
 
-5. Have fun!
+Have fun!
