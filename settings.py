@@ -44,6 +44,12 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "templates"),)
 
 
+####################
+# BERICHT SETTINGS #
+####################
+
+ARCHIVE_DIR = os.path.join(PROJECT_ROOT, "../feed-archive")
+
 
 ######################
 # MEZZANINE SETTINGS #
