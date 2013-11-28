@@ -119,13 +119,17 @@ class Item(models.Model):
 
     @classmethod
     def from_feed_entry(cls, feed, entry):
+        if 'updated' in entry:
+            updated_at = parse_time(entry.updated_parsed)
+        else:
+            updated_at = parse_time(entry.published_parsed)
         item, new = cls.objects.get_or_create(
             feed=feed, link=entry.link,
             defaults={
                 'title': entry.title,
                 # @TODO: sanitize html (XSS,..)
                 'description': entry.description,
-                'updated_at': parse_time(entry.published_parsed),
+                'updated_at': updated_at,
             })
         item.save()
 
