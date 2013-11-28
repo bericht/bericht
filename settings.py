@@ -3,6 +3,9 @@
 # MEZZANINE SETTINGS #
 ######################
 
+SITE_TITLE = 'Bericht'
+SITE_TAGLINE = None
+
 # The following settings are already defined with default values in
 # the ``defaults.py`` module within each of Mezzanine's apps, but are
 # common enough to be put here, commented out, for convenient
