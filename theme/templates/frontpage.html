@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load mezzanine_tags %}
+
+{% block meta_title %}
+Startseite
+{% endblock %}
+
+{% block main %}
+<section id="article-list">
+  {% for article in articles %}
+  <article id="{{article.slug}}">
+    <h2>{{ article.title }}</h2>
+    <div class="description">
+      {{ article.description|safe }}
+    </div>
+    <a class="source-link" href="{{ article.link }}">
+      Mehr auf der Originalseite</a>
+  </article>
+  {% endfor %}
+</section>
+{% endblock %}
