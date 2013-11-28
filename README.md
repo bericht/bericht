@@ -12,7 +12,7 @@ following to small or medium-sized communities:
 Installation
 ============
 
-Usage of [virtalenv](https://pypi.python.org/pypi/virtualenv) is strongly
+Usage of [virtualenv](https://pypi.python.org/pypi/virtualenv) is strongly
 recommended! Currently, Bericht needs python 2 because mezzanine has not
 been ported to python 3 so far.
 
