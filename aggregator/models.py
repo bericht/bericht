@@ -65,9 +65,9 @@ parsed_item = Signal(providing_args=['entry'])
 class Feed(models.Model):
     feed_file = models.OneToOneField(FeedFile)
 
-    title = models.CharField(max_length=512)
-    link = models.URLField()
-    description = models.TextField()
+    title = models.CharField(max_length=512, default=None)
+    link = models.URLField(default=None)
+    description = models.TextField(default=None)
     updated_at = models.DateTimeField()
     parsed_at = models.DateTimeField(auto_now=True)
 
