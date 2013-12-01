@@ -242,6 +242,8 @@ INSTALLED_APPS = (
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
 
+    "taggit",
+
     "bericht.theme",
     "bericht.aggregator",
 
