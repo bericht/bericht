@@ -80,10 +80,10 @@ class Feed(models.Model):
         feed, new = cls.objects.get_or_create(
             feed_file=feed_file,
             defaults={
-                'title': parsed.feed.title,
-                'link': parsed.feed.link,
+                'title': parsed.feed.get('title', None),
+                'link': parsed.feed.get('link', None),
                 # @TODO: sanitize html (XSS,..)
-                'description': parsed.feed.description,
+                'description': parsed.feed.get('description', None),
                 'updated_at': now()
             })
         feed.save()
