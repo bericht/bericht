@@ -30,20 +30,18 @@ class FeedFile(models.Model):
         try:
             headers = {'user-agent': feedparser.USER_AGENT}
             req = requests.get(self.url, headers=headers, verify=False)
-            if req.status_code == 200:
-                self.body = req.content
-                self.save()
-                self.archive(self.url, self.body)
-                fetched_feed_file.send(sender=self)
-
-                return True
-            else:
-                raise requests.HTTPError("error while fetching '%s': %s" %
-                                         (self.url, req.status_code))
-
         except Exception as e:
             logger.error(e)
             return None
+
+        if req.status_code != 200:
+            raise requests.HTTPError("error while fetching '%s': %s" %
+                                     (self.url, req.status_code))
+        self.body = req.content
+        self.save()
+        self.archive(self.url, self.body)
+        fetched_feed_file.send(sender=self)
+        return True
 
     def archive(self, url, content):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S.rss')
