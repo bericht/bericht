@@ -41,7 +41,7 @@ class FeedFile(models.Model):
                 raise requests.HTTPError("error while fetching '%s': %s" %
                                          (self.url, req.status_code))
 
-        except requests.RequestException as e:
+        except Exception as e:
             logger.error(e)
             return None
 
