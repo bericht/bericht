@@ -5,6 +5,7 @@ from datetime import datetime
 
 import requests
 import feedparser
+from taggit.managers import TaggableManager
 
 from django.conf import settings
 from django.db import models
@@ -105,6 +106,7 @@ class Item(models.Model):
 
     title = models.CharField(max_length=512)
     link = models.URLField()
+    tags = TaggableManager()
     description = models.TextField()
     updated_at = models.DateTimeField()
 
@@ -129,6 +131,10 @@ class Item(models.Model):
                 'description': entry.description,
                 'updated_at': updated_at,
             })
+
+        if 'tags' in entry and 'term' in entry.tags[0]:
+            item.tags.add(*[tag.term for tag in entry.tags])
+
         item.save()
 
         status = "new" if new else "updated"
