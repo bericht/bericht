@@ -27,8 +27,9 @@ class FeedFile(models.Model):
 
     def fetch(self):
         logger.info("fetching feed at '%s'..." % self.url)
-        req = requests.get(self.url, verify=False)
         try:
+            headers = {'user-agent': feedparser.USER_AGENT}
+            req = requests.get(self.url, headers=headers, verify=False)
             if req.status_code == 200:
                 self.body = req.content
                 self.save()
