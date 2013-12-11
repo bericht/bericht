@@ -9,34 +9,6 @@ following to small or medium-sized communities:
 * a open calendar system with ical import and export.
 * a forum in the style of popular question and answer sites.
 
-Installation
-============
-
-Usage of [virtualenv](https://pypi.python.org/pypi/virtualenv) is strongly
-recommended! Currently, Bericht needs python 2 because mezzanine has not
-been ported to python 3 so far.
-
-Install the requirements:
-
-    pip install -r requirements/project.txt
-
-Create a local_settings.py file:
-
-    DEBUG = True
-    TEST_RUNNER = 'django.test.simple.DjangoTestSuiteRunner'
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": "dev.db",
-        }
-    }
-
-Initialize the database:
-
-    python manage.py createdb --nodata
-
-Run the development server:
-
-    python manage.py runserver
-
-Have fun!
+Documentation is available in the docs/ directory. You can either read the
+*.rst files or use `make html`/`make latexpdf` to get it in a more readable
+format.
