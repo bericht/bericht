@@ -7,6 +7,8 @@ import requests
 import feedparser
 from taggit.managers import TaggableManager
 
+from readability.readability import Document
+
 from django.conf import settings
 from django.db import models
 from django.dispatch import Signal, receiver
@@ -16,7 +18,6 @@ from django.template.defaultfilters import slugify
 logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
-
 
 class FeedFile(models.Model):
     """The class that fetches the feed file 
@@ -132,7 +133,7 @@ def parse_feed_file(sender, **kwargs):
 
 class Item(models.Model):
     feed = models.ForeignKey(Feed)
-
+    
     title = models.CharField(max_length=512)
     link = models.URLField()
     tags = TaggableManager()
@@ -141,6 +142,8 @@ class Item(models.Model):
     updated_at = models.DateTimeField()
     #: If the feed comes with the full content (not only the summary), populate this. 
     content = models.TextField(blank = True)
+    #: Stores the way content was obtained:
+    content_source = models.CharField(max_length=32)
     #: This holds the HTML of the item link at the time it got parsed. 
     link_html = models.TextField(blank = True)
 
@@ -174,9 +177,21 @@ class Item(models.Model):
             for c in entry.content:
                 if c.type in ['text/plain','text/html','application/xhtml+xml']:
                     item.content = c.value
+                    item.content_source = 'feed'
                     # for now take the first suitable content and exit the loop
                     break
-
+        
+        # fetching and storing the HTML of the linked web page 
+        # @TODO only if content is empty or always for archiving?
+        req = requests.get(item.link, headers={'user-agent': 'readability'}, verify=False)
+        if req.status_code != 200:
+            raise requests.HTTPError("error while fetching HTML of '%s': %s" %
+                                     (item.link, req.status_code))
+        item.link_html = req.content
+        # extract article from html if content is empty:
+        if item.content == '':
+            item.content = Document(req.content).summary(html_partial=True)
+            item.content_source = 'original page'
         item.save()
 
         status = "new" if new else "updated"
