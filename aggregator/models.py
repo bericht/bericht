@@ -153,9 +153,8 @@ class Item(models.Model):
         else:
             updated_at = parse_time(entry.published_parsed)
         item, new = cls.objects.get_or_create(
-            feed=feed, link=entry.link,
+            feed=feed, link=entry.link, title=entry.title, 
             defaults={
-                'title': entry.title,
                 # @TODO: sanitize html (XSS,..)
                 'description': entry.description,
                 'updated_at': updated_at,
