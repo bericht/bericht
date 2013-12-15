@@ -19,26 +19,55 @@ fetched_feed_file = Signal()
 
 
 class FeedFile(models.Model):
+    """The class that fetches the feed file 
+    
+    This class fetches the feed file and stores the feed file contents. It also
+    takes care to minimize used bandwidth and supports archiving the feed files
+    to the local storage.
+    """
+    #: The url from where the feed file is to be fetched. Has to be unique.
     url = models.URLField(unique=True)
+    #: The contents of the feed file. 
     body = models.TextField()
+    #: When this feed file has been updated the last time. Defaults to now.
     updated_at = models.DateTimeField(auto_now=True)
+    #: The ETag is a special header that some feed publishers support to reduce bandwidth.
+    etag = models.CharField(max_length=128, blank=True)
+    #: The last modified header is also supported by some publishers to reduce bandwidth.
+    modified = models.CharField(max_length=40, blank=True)
 
     def __unicode__(self):
         return self.url
 
     def fetch(self):
+        """Fetches the feed file in a bandwidth-friendly way
+        
+        Tries to only fetch the new items if the feed publisher supports ETag 
+        and/or last_modified HTTP headers. It also archives the fetched
+        file and parses the file by using the model Feed. 
+        """
         logger.info("fetching feed at '%s'..." % self.url)
         try:
-            headers = {'user-agent': feedparser.USER_AGENT}
+            headers = {'user-agent': feedparser.USER_AGENT, 'If-None-Match': self.etag, 'If-Modified-Since': self.modified}
             req = requests.get(self.url, headers=headers, verify=False)
         except Exception as e:
             logger.error(e)
             return None
+        
+        """
+        If the HTTP status code is 304, the feed didn't change since the last 
+        time the file was fetched, thus no further processing useful.
+        """
+        if req.status_code == 304:
+            self.save()
+            return True
 
         if req.status_code != 200:
             raise requests.HTTPError("error while fetching '%s': %s" %
                                      (self.url, req.status_code))
         self.body = req.content
+        self.etag = req.headers.get('etag', '')
+        self.modified = req.headers.get('last-modified', '')
         self.save()
         self.archive(self.url, self.body)
         fetched_feed_file.send(sender=self)
