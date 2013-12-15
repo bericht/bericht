@@ -137,7 +137,12 @@ class Item(models.Model):
     link = models.URLField()
     tags = TaggableManager()
     description = models.TextField()
+    #: Holds the datetime when this item was published or updated. 
     updated_at = models.DateTimeField()
+    #: If the feed comes with the full content (not only the summary), populate this. 
+    content = models.TextField(blank = True)
+    #: This holds the HTML of the item link at the time it got parsed. 
+    link_html = models.TextField(blank = True)
 
     def __unicode__(self):
         return "[%s] %s" % (self.feed.title, self.title)
@@ -162,6 +167,15 @@ class Item(models.Model):
 
         if 'tags' in entry and 'term' in entry.tags[0]:
             item.tags.add(*[tag.term for tag in entry.tags])
+        
+        # try to get the entry content in suitable format if supplied
+        # see http://pythonhosted.org/feedparser/reference-entry-content.html
+        if 'content' in entry:
+            for c in entry.content:
+                if c.type in ['text/plain','text/html','application/xhtml+xml']:
+                    item.content = c.value
+                    # for now take the first suitable content and exit the loop
+                    break
 
         item.save()
 
