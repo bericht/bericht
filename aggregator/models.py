@@ -72,8 +72,10 @@ class FeedFile(models.Model):
             return True
 
         if req.status_code != 200:
-            raise requests.HTTPError("error while fetching '%s': %s" %
-                                     (self.url, req.status_code))
+            logger.error("error while fetching '%s': %s" %
+                         (self.url, req.status_code))
+            return
+
         self.body = req.content
         self.etag = req.headers.get('etag', '')
         self.modified = req.headers.get('last-modified', '')
@@ -193,9 +195,14 @@ class Item(models.Model):
         # @TODO only if content is empty or always for archiving?
         req = requests.get(item.link, headers={'user-agent': 'readability'},
                            verify=False)
+
+        # requests.get handles redirection, so everything except 200 here
+        # should be an actual error.
         if req.status_code != 200:
-            raise requests.HTTPError("error while fetching HTML of '%s': %s" %
-                                     (item.link, req.status_code))
+            logger.error("error while fetching HTML of '%s': %s" %
+                         (item.link, req.status_code))
+            return
+
         item.link_html = req.content
         # extract article from html if content is empty:
         if item.content == '':
@@ -212,7 +219,7 @@ def save_item(sender, **kwargs):
     Item.from_feed_entry(sender, kwargs['entry'])
 
 
-# @TODO: Should probably be somewhere elsse ;)
+# @TODO: Should probably be somewhere else ;)
 def parse_time(time_struct):
     return make_aware(datetime.fromtimestamp(mktime(time_struct)),
                       get_current_timezone())
