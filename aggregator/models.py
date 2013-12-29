@@ -6,8 +6,9 @@ from datetime import datetime
 import requests
 import feedparser
 from taggit.managers import TaggableManager
-from lxml.html.clean import Cleaner
+from lxml.html.clean import clean_html
 from lxml.html.soupparser import fromstring
+from lxml.etree import tostring
 from readability.readability import Document
 
 from django.conf import settings
@@ -20,9 +21,11 @@ logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
 
+
 # @TODO Uses a blacklist by default, we might want to replace that with a
 # whitelist.
-sanitize = lambda x: Cleaner(style=True)(fromstring(x))
+def sanitize(html):
+    return tostring(clean_html(fromstring(html)))
 
 
 class FeedFile(models.Model):
