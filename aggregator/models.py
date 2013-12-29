@@ -60,10 +60,8 @@ class FeedFile(models.Model):
             logger.error(e)
             return None
 
-        """
-        If the HTTP status code is 304, the feed didn't change since the last
-        time the file was fetched, thus no further processing useful.
-        """
+        # If the HTTP status code is 304, the feed didn't change since the last
+        # time the file was fetched, thus no further processing useful.
         if req.status_code == 304:
             self.save()
             return True
