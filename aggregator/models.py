@@ -6,7 +6,8 @@ from datetime import datetime
 import requests
 import feedparser
 from taggit.managers import TaggableManager
-
+from lxml.html.clean import Cleaner
+from lxml.html.soupparser import fromstring
 from readability.readability import Document
 
 from django.conf import settings
@@ -18,6 +19,10 @@ from django.template.defaultfilters import slugify
 logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
+
+# @TODO Uses a blacklist by default, we might want to replace that with a
+# whitelist.
+sanitize = lambda x: Cleaner(style=True)(fromstring(x))
 
 
 class FeedFile(models.Model):
@@ -114,8 +119,7 @@ class Feed(models.Model):
             defaults={
                 'title': parsed.feed.get('title', None),
                 'link': parsed.feed.get('link', None),
-                # @TODO: sanitize html (XSS,..)
-                'description': parsed.feed.get('description', None),
+                'description': sanitize(parsed.feed.get('description', '')),
                 'updated_at': now()
             })
         feed.save()
@@ -167,8 +171,7 @@ class Item(models.Model):
         item, new = cls.objects.get_or_create(
             feed=feed, link=entry.link, title=entry.title,
             defaults={
-                # @TODO: sanitize html (XSS,..)
-                'description': entry.description,
+                'description': sanitize(entry.description),
                 'updated_at': updated_at,
             })
 
