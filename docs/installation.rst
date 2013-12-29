@@ -31,6 +31,7 @@ Create a ``local_settings.py`` file::
 Initialize the database::
 
   python manage.py createdb --nodata
+  python manage.py migrate
 
 Run the development server::
 
