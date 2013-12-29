@@ -122,7 +122,7 @@ class Feed(models.Model):
         feed, new = cls.objects.get_or_create(
             feed_file=feed_file,
             defaults={
-                'title': parsed.feed.get('title', None),
+                'title': parsed.feed.get('title', feed_file.url),
                 'link': parsed.feed.get('link', None),
                 'description': sanitize(parsed.feed.get('description', '')),
                 'updated_at': now()
