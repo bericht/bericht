@@ -16,6 +16,11 @@ urlpatterns = patterns("",
     ("^admin/", include(admin.site.urls)),
 
     url("^$", "bericht.frontpage.views.frontpage", name='home'),
+    url("^articles/$", "bericht.aggregator.views.article_list",
+        name='articles'),
+    url("^articles.json$", "bericht.aggregator.views.article_list_json",
+        name='articles.json'),
+
 
     # MEZZANINE'S URLS
     # ----------------

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load mezzanine_tags staticfiles %}
+
+{# @TODO Pagination #}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "admin.css" %}">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static "jquery.hotkeys.js" %}"></script>
+    <script src="{% static "admin.js" %}"></script>
+{% endblock %}
+
+
+{% block meta_title %}
+Articles
+{% endblock %}
+
+{% block main %}
+  <form action="" method="get">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+  </form>
+
+<section id="article-list">
+</section>
+{% endblock %}

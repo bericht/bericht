@@ -8,3 +8,5 @@ readability-lxml==0.3.0.2
 BeautifulSoup==3.2.1
 django-debug-toolbar==1.0
 django-extensions==1.2.5
+django-filter==0.7
+djangorestframework==2.3.11

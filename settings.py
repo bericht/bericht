@@ -243,6 +243,7 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
 
     "taggit",
+    "rest_framework",
 
     "bericht.theme",
     "bericht.aggregator",

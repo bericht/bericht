@@ -1,0 +1,17 @@
+body {
+    margin-top: 60px;
+}
+
+#article-list {
+    padding: 0.5em 0;
+}
+
+#article-list article {
+    padding: 0.5em;
+    margin: 0 -0.5em;
+}
+
+#article-list article.selected {
+    background-color: rgb(245, 245, 245);  /* @TODO: use lesscss constant. */
+    border-radius: 0.5em;
+}
