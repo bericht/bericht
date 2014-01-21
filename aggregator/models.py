@@ -9,7 +9,6 @@ from taggit.managers import TaggableManager
 from lxml.html.clean import clean_html
 from lxml.html.soupparser import fromstring
 from lxml.etree import tostring
-from readability.readability import Document
 
 from django.conf import settings
 from django.db import models
@@ -144,19 +143,22 @@ def parse_feed_file(sender, **kwargs):
 
 
 class Item(models.Model):
+    #: The Feed this Item belongs to.
     feed = models.ForeignKey(Feed)
 
+    #: The title of the Item.
     title = models.CharField(max_length=512)
+    #: The url this Item points to, courtesy of the link attribute.
     link = models.URLField()
+    #: Tags that are provided in the Feed Item.
     tags = TaggableManager()
+    #: Description is usually the teaser/summary, i.e. a shorter content.
     description = models.TextField()
     #: Holds the datetime when this item was published or updated.
     updated_at = models.DateTimeField()
     #: If the feed comes with the full content (not only the summary), populate
     #: this.
     content = models.TextField(blank=True)
-    #: Stores the way content was obtained:
-    content_source = models.CharField(max_length=32)
     #: This holds the HTML of the item link at the time it got parsed.
     link_html = models.TextField(blank=True)
 
@@ -189,13 +191,12 @@ class Item(models.Model):
             for c in entry.content:
                 if c.type in ['text/plain', 'text/html',
                               'application/xhtml+xml']:
+                    # @TODO sanitize manually if type is not text/html
                     item.content = c.value
-                    item.content_source = 'feed'
                     # for now take the first suitable content and exit the loop
                     break
 
         # fetching and storing the HTML of the linked web page
-        # @TODO only if content is empty or always for archiving?
         req = requests.get(item.link, headers={'user-agent': 'readability'},
                            verify=False)
 
@@ -207,10 +208,6 @@ class Item(models.Model):
             return
 
         item.link_html = req.content
-        # extract article from html if content is empty:
-        if item.content == '':
-            item.content = Document(req.content).summary(html_partial=True)
-            item.content_source = 'original page'
         item.save()
 
         status = "new" if new else "updated"
