@@ -1,7 +1,5 @@
 {% extends "base.html" %}
-{% load mezzanine_tags staticfiles %}
-
-{# @TODO Pagination #}
+{% load mezzanine_tags staticfiles mustachejs %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "admin.css" %}">
@@ -9,6 +7,9 @@
 
 {% block extra_js %}
     <script src="{% static "jquery.hotkeys.js" %}"></script>
+    <script src="{% static "underscore.js" %}"></script>
+    <script src="{% static "backbone.js" %}"></script>
+    <script src="{% static "mustache.js" %}"></script>
     <script src="{% static "admin.js" %}"></script>
 {% endblock %}
 
@@ -17,12 +18,18 @@
 Articles
 {% endblock %}
 
-{% block main %}
-  <form action="" method="get">
-    {{ filter.form.as_p }}
-    <input type="submit" />
-  </form>
+{% block custom_layout %}
+    <div class="row">
+      <div id="sidebar" class="col-md-3 left">
+        <ul id="sidebar-list">
+        </ul>
+      </div>
+      <div id="content" class="col-md-9 middle">
+      </div>
+    </div>
+{% endblock %}
 
-<section id="article-list">
-</section>
+{% block templates %}
+{% mustachejs "sidebar_item" %}
+{% mustachejs "article_single" %}
 {% endblock %}

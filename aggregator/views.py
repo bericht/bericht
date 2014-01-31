@@ -1,6 +1,6 @@
-from django.http import HttpResponse, HttpResponseForbidden
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
+from rest_framework import generics
 from mezzanine.utils.views import render
 from django_filters import FilterSet
 
@@ -25,17 +25,12 @@ def article_list(request):
     return render(request, ['article_list.html'])
 
 
-# @TODO: protected
+# @TODO: authentification/permissions
 # @TODO: extra app for administrative views?
 # @TODO: pagination
-@csrf_exempt
-def article_list_json(request):
-    if request.method == 'GET':
-        articles = Item.objects.order_by('-updated_at')
-        filter = ArticleFilter(request.GET, queryset=articles)
-        serializer = ArticleSerializer(filter[:20], many=True)
-        return JSONResponse(serializer.data)
-    elif request.method == 'POST':
-        return HttpResponseForbidden()
-
-    # @TODO Articles, not Items
+# @TODO: Articles, not Items
+class ArticlesView(generics.ListCreateAPIView):
+    queryset = Item.objects.order_by('-updated_at')
+    serializer_class = ArticleSerializer
+    filter_class = ArticleFilter
+    paginate_by = 5
