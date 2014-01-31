@@ -1,7 +1,7 @@
-
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
+from aggregator.views import ArticlesView
 
 admin.autodiscover()
 
@@ -16,10 +16,10 @@ urlpatterns = patterns("",
     ("^admin/", include(admin.site.urls)),
 
     url("^$", "bericht.frontpage.views.frontpage", name='home'),
-    url("^articles/$", "bericht.aggregator.views.article_list",
-        name='articles'),
-    url("^articles.json$", "bericht.aggregator.views.article_list_json",
-        name='articles.json'),
+    url("^backend/articles$", "bericht.aggregator.views.article_list",
+        name='backend-articles'),
+    url("^api/articles$", ArticlesView.as_view(),
+        name='articles-view'),
 
 
     # MEZZANINE'S URLS
