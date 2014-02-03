@@ -3,11 +3,19 @@
 //xhr.setRequestHeader('X-CSRFToken', token);
 
 $(document).ready(function() {
-    window.bericht = window.bericht || {};
+    var articles, keys;
 
-    window.bericht.articles = new ArticleList();
-    new ArticleListView({
-        collection: window.bericht.articles
+    window.bericht = window.bericht || {};
+    window.bericht.articles = articles = new ArticleList();
+    new ArticleListView({collection: articles});
+
+    keys = {
+        'j': articles.next,
+        'k': articles.prev,
+    };
+    
+    $.each(keys, function(key, fn) {
+        $(document).bind('keypress.'+key, fn);
     });
 });
 
@@ -20,6 +28,10 @@ var Article = Backbone.Model.extend({
 var ArticleList = Backbone.Collection.extend({
     url: '/api/articles',
     model: Article,
+
+    initialize: function() {
+        _.bindAll(this, 'select', 'next', 'prev');
+    },
 
     select: function(article) {
         if (typeof(this.selected) !== 'undefined') {
