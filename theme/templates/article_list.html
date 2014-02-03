@@ -9,7 +9,6 @@
     <script src="{% static "jquery.hotkeys.js" %}"></script>
     <script src="{% static "underscore.js" %}"></script>
     <script src="{% static "backbone.js" %}"></script>
-    <script src="{% static "mustache.js" %}"></script>
     <script src="{% static "admin.js" %}"></script>
 {% endblock %}
 
@@ -27,9 +26,4 @@ Articles
       <div id="content" class="col-md-9 middle">
       </div>
     </div>
-{% endblock %}
-
-{% block templates %}
-{% mustachejs "sidebar_item" %}
-{% mustachejs "article_single" %}
 {% endblock %}
