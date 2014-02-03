@@ -2,7 +2,7 @@ body {
     margin-top: 60px;
 }
 
-#article-list {
+#arti-list {
     padding: 0.5em 0;
 }
 
@@ -11,7 +11,20 @@ body {
     margin: 0 -0.5em;
 }
 
-#article-list article.selected {
+#sidebar-list {
+    font-size: 0.9em;
+    list-style: none;
+    padding-left: 0;
+}
+#sidebar-list li { 
+    padding: 0.5em;
+
     background-color: rgb(245, 245, 245);  /* @TODO: use lesscss constant. */
-    border-radius: 0.5em;
+    border: 1px solid rgb(231, 231, 231);
+    border-bottom: none;
+
+}
+#sidebar-list li.selected {
+    background-color: white;
+    border-right: none;
 }
