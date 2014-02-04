@@ -43,8 +43,6 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # Don't forget to use absolute paths, not relative paths.
 TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "theme/templates"),)
 
-MUSTACHEJS_DIRS = [os.path.join(d, "mustache") for d in TEMPLATE_DIRS]
-
 ####################
 # BERICHT SETTINGS #
 ####################
@@ -245,7 +243,6 @@ INSTALLED_APPS = (
 
     "taggit",
     "rest_framework",
-    "mustachejs",
 
     "bericht.theme",
     "bericht.aggregator",
