@@ -211,7 +211,8 @@ class Item(models.Model):
         item.save()
 
         status = "new" if new else "updated"
-        logger.info("parsed %s item: %s" % (status, feed.feed_file.url))
+        logger.info("parsed %s item: %s [from %s]" % (status, feed.link,
+                                                      feed.feed_file.url))
 
 
 @receiver(parsed_item)
