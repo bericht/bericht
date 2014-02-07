@@ -171,30 +171,14 @@ class Item(models.Model):
 
     @classmethod
     def from_feed_entry(cls, feed, entry):
-        if 'updated' in entry:
-            updated_at = parse_time(entry.updated_parsed)
-        else:
-            updated_at = parse_time(entry.published_parsed)
         item, new = cls.objects.get_or_create(
             feed=feed, link=entry.link, title=entry.title,
             defaults={
                 'description': sanitize(entry.description),
-                'updated_at': updated_at,
+                'updated_at': cls._get_date_of_update(entry),
             })
-
-        if 'tags' in entry and 'term' in entry.tags[0]:
-            item.tags.add(*[tag.term for tag in entry.tags])
-
-        # try to get the entry content in suitable format if supplied
-        # see http://pythonhosted.org/feedparser/reference-entry-content.html
-        if 'content' in entry:
-            for c in entry.content:
-                if c.type in ['text/plain', 'text/html',
-                              'application/xhtml+xml']:
-                    # @TODO sanitize manually if type is not text/html
-                    item.content = c.value
-                    # for now take the first suitable content and exit the loop
-                    break
+        item.tags.add(*cls._get_tags(entry))
+        item.content = cls._get_item_content_as_text(entry)
 
         # fetching and storing the HTML of the linked web page
         req = requests.get(item.link, headers={'user-agent': 'readability'},
@@ -213,6 +197,29 @@ class Item(models.Model):
         status = "new" if new else "updated"
         logger.info("parsed %s item: %s [from %s]" % (status, feed.link,
                                                       feed.feed_file.url))
+
+    @classmethod
+    def _get_date_of_update(cls, entry):
+        if 'updated' in entry:
+            return parse_time(entry.updated_parsed)
+        else:
+            return parse_time(entry.published_parsed)
+
+    @classmethod
+    def _get_item_content_as_text(cls, entry):
+        # try to get the entry content in suitable format if supplied
+        # see http://pythonhosted.org/feedparser/reference-entry-content.html
+        if 'content' in entry:
+            for c in entry.content:
+                if c.type in ['text/plain', 'text/html',
+                              'application/xhtml+xml']:
+                    # @TODO sanitize
+                    return c.value
+
+    @classmethod
+    def _get_tags(cls, entry):
+        if 'tags' in entry and 'term' in entry.tags[0]:
+            return [tag.term for tag in entry.tags]
 
 
 @receiver(parsed_item)
