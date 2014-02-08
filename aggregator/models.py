@@ -84,7 +84,8 @@ class FeedFile(models.Model):
         self.save()
         self.archive(self.url, self.body)
         fetched_feed_file.send(sender=self)
-        return True
+
+        return self
 
     def archive(self, url, content):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S.rss')
