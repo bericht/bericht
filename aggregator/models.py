@@ -215,11 +215,14 @@ class Item(models.Model):
                               'application/xhtml+xml']:
                     # @TODO sanitize
                     return c.value
+        return ''  # if we did not return something else so far
 
     @classmethod
     def _get_tags(cls, entry):
         if 'tags' in entry and 'term' in entry.tags[0]:
             return [tag.term for tag in entry.tags]
+        else:
+            return []
 
 
 @receiver(parsed_item)
