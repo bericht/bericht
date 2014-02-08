@@ -177,8 +177,10 @@ SITE_ID = 1
 USE_I18N = False
 
 # Make these unique, and don't share it with anybody.
-SECRET_KEY = "df9ee7ac-5d80-4259-a1d3-a3f4ff9ed9eaf0f83f6b-cc7c-4e3c-bb88-0964552ba2ef8fe593fe-44e5-4bc1-b1f8-65afe5796d1b"
-NEVERCACHE_KEY = "3e27956d-414f-4b48-afa0-e56996267d99d9eae7fe-d3ee-490f-9d40-1cb1383eb4560c7298d9-0b05-4c0a-9d08-94897cffcc11"
+SECRET_KEY = ("df9ee7ac-5d80-4259-a1d3-a3f4ff9ed9eaf0f83f6b-cc7c-4e3c-bb88-" +
+              "0964552ba2ef8fe593fe-44e5-4bc1-b1f8-65afe5796d1b")
+NEVERCACHE_KEY = ("3e27956d-414f-4b48-afa0-e56996267d99d9eae7fe-d3ee-490f-" +
+                  "9d40-1cb1383eb4560c7298d9-0b05-4c0a-9d08-94897cffcc11")
 
 # Tuple of IP addresses, as strings, that:
 #   * See debug comments, when DEBUG is true
@@ -198,12 +200,12 @@ AUTHENTICATION_BACKENDS = ("mezzanine.core.auth_backends.MezzanineBackend",)
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # The numeric mode to set newly-uploaded files to. The value should be
 # a mode you'd pass directly to os.chmod.
-FILE_UPLOAD_PERMISSIONS = 0644
+FILE_UPLOAD_PERMISSIONS = 644
 
 
 #############
@@ -350,7 +352,7 @@ OPTIONAL_APPS = (
 # ignored in your version control system allowing for settings to be
 # defined per machine.
 try:
-    from local_settings import *
+    from local_settings import * # flake8: noqa
 except ImportError:
     pass
 
