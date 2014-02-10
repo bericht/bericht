@@ -33,4 +33,4 @@ class ArticlesView(generics.ListCreateAPIView):
     queryset = Item.objects.order_by('-updated_at')
     serializer_class = ArticleSerializer
     filter_class = ArticleFilter
-    paginate_by = 5
+    paginate_by = 10
