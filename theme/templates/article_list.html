@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load mezzanine_tags staticfiles %}
 
+{% block breadcrumb_menu %}
+<!-- @TODO Real link. -->
+<li>
+    <a>Backend</a>
+</li>
+<li class="active">Articles</li>
+{% endblock %}
+
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "admin.css" %}">
 {% endblock %}
