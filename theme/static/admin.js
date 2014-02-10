@@ -97,7 +97,7 @@ var ArticleView = Backbone.View.extend({
     render: function() {
         this.$el.attr('id', this.model.get('slug'))
             .append($('<h2>').html(this.model.get('title')))
-            .append($('<div>').html(this.model.get('description')));
+            .append($('<div>').html(this.model.get('content')));
         return this;
     },
 });

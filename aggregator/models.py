@@ -170,6 +170,9 @@ class Item(models.Model):
         return "%s-%s" % (slugify(self.feed.title),
                           slugify(self.title))
 
+    def get_content(self):
+        return self.content or self.description
+
     @classmethod
     def from_feed_entry(cls, feed, entry):
         item, new = cls.objects.get_or_create(
