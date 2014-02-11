@@ -19,6 +19,10 @@ $(document).ready(function() {
     });
 });
 
+var render_template = function (name, context) {
+    return Mustache.render(Mustache.TEMPLATES[name], context);
+};
+
 var Article = Backbone.Model.extend({
     defaults: {
         selected: false,
@@ -83,7 +87,6 @@ var ArticleSidebarView = Backbone.View.extend({
 });
 
 var ArticleView = Backbone.View.extend({
-    tagName: 'article',
 
     initialize: function() {
         this.render();
@@ -91,7 +94,8 @@ var ArticleView = Backbone.View.extend({
     },
 
     selected: function() {
-        $('#content').html(this.$el);
+        $('#content').html(render_template(
+            'article-single', {article: this.model.attributes}));
     },
     
     render: function() {

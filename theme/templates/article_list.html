@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load mezzanine_tags staticfiles %}
+{% load mustachejs mezzanine_tags staticfiles %}
 
 {% block breadcrumb_menu %}
 <!-- @TODO Real link. -->
@@ -16,6 +16,7 @@
 
 {% block extra_js %}
     <script src="{% static "jquery.hotkeys.js" %}"></script>
+    <script src="{% static "mustache.js" %}"></script>
     <script src="{% static "underscore.js" %}"></script>
     <script src="{% static "backbone.js" %}"></script>
     <script src="{% static "admin.js" %}"></script>
@@ -35,4 +36,8 @@ Articles
       <div id="content" class="col-md-9 middle">
       </div>
     </div>
+{% endblock %}
+
+{% block templates %}
+{% mustachejs "article-single" %}
 {% endblock %}
