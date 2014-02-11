@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll; /* hack to force vertical scrollbar on all pages */
+}
+
 
 #article-list {
     padding: 0.5em 0;
@@ -23,5 +27,20 @@
 }
 #sidebar-list li.selected {
     background-color: white;
-    border-right: none;
+    border-right-color: white;
+}
+
+article h2 {
+    /* Bootstraps h2 has a font-size of 30px and a line-height of 1.1 = 33px.
+       We set the height of this container to at least 66px to avoid vertical
+       jumps of the content area when we switch between articles with one- and
+       two-line headings. */
+    min-height: 66px;
+}
+article .meta {
+    padding: 1em 0;
+}
+article .meta .info span {
+    margin-left: 1em;
+    margin-right: 0.1em;
 }
