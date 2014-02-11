@@ -1,0 +1,24 @@
+<article id="{{ article.slug }}">
+  <h2>{{ article.title }}</h2>
+  <div class="meta">
+    <div class="actions btn-group btn-group-sm">
+      <button type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-thumbs-up"></span> Good
+      </button>    
+      <button type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-thumbs-down"></span> Bad
+      </button>    
+      <button type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-remove"></span> Veto
+      </button>
+    </div>
+    <div class="info pull-right">
+      <span class="glyphicon glyphicon-tags"></span> {{#article.tags}}{{.}}, {{/article.tags}}{{^article.tags}}None{{/article.tags}}
+      <span class="glyphicon glyphicon-time"></span> {{ article.updated_at }}
+      <span class="glyphicon glyphicon-globe"></span> {{ article.source }}
+    </div>
+  </div>
+  <div class="content">
+    {{{ article.content }}}
+  </div>
+</article>
