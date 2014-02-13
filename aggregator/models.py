@@ -193,6 +193,8 @@ class Item(models.Model):
         item.tags.add(*cls._get_tags(entry))
         item.content = cls._get_item_content_as_text(entry)
 
+        # @TODO: Ask if the html was actually modified (ETag, 304).
+        # @TODO: Should probably be in it's own method/triggered by signal.
         # fetching and storing the HTML of the linked web page
         req = requests.get(item.link, headers={'user-agent': 'readability'},
                            verify=False)
