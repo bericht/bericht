@@ -19,12 +19,28 @@ from django.template.defaultfilters import slugify
 logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
+parsed_item = Signal(providing_args=['entry'])
+
+
+@receiver(fetched_feed_file)
+def parse_feed_file(sender, **kwargs):
+    Feed.from_file(sender)
+
+
+@receiver(parsed_item)
+def save_item(sender, **kwargs):
+    Item.from_feed_entry(sender, kwargs['entry'])
 
 
 # @TODO Uses a blacklist by default, we might want to replace that with a
 # whitelist.
 def sanitize(html):
     return tostring(clean_html(fromstring(html)))
+
+
+def parse_time(time_struct):
+    return make_aware(datetime.fromtimestamp(mktime(time_struct)),
+                      get_current_timezone())
 
 
 class FeedFile(models.Model):
@@ -101,8 +117,6 @@ class FeedFile(models.Model):
         for feed_file in cls.objects.all():
             feed_file.fetch()
 
-parsed_item = Signal(providing_args=['entry'])
-
 
 class Feed(models.Model):
     feed_file = models.OneToOneField(FeedFile)
@@ -136,11 +150,6 @@ class Feed(models.Model):
             parsed_item.send(sender=feed, entry=entry)
 
         return feed
-
-
-@receiver(fetched_feed_file)
-def parse_feed_file(sender, **kwargs):
-    Feed.from_file(sender)
 
 
 class Item(models.Model):
@@ -227,14 +236,3 @@ class Item(models.Model):
             return [tag.term for tag in entry.tags]
         else:
             return []
-
-
-@receiver(parsed_item)
-def save_item(sender, **kwargs):
-    Item.from_feed_entry(sender, kwargs['entry'])
-
-
-# @TODO: Should probably be somewhere else ;)
-def parse_time(time_struct):
-    return make_aware(datetime.fromtimestamp(mktime(time_struct)),
-                      get_current_timezone())
