@@ -40,7 +40,9 @@ article h2 {
 article .meta {
     padding: 1em 0;
 }
-article .meta .info span {
+article .meta .info .glyphicon {
     margin-left: 1em;
     margin-right: 0.1em;
 }
+article .meta .tags { padding-top: 1em; }
+article .meta .glyphicon { margin-right: 0.5em; }
