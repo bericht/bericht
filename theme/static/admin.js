@@ -32,6 +32,7 @@ var Article = Backbone.Model.extend({
 var ArticleList = Backbone.Collection.extend({
     url: '/api/articles',
     model: Article,
+    page: 1,
 
     initialize: function() {
         _.bindAll(this, 'select', 'next', 'prev');
@@ -40,10 +41,6 @@ var ArticleList = Backbone.Collection.extend({
     select: function(article) {
         if (typeof(this.selected) !== 'undefined') {
             this.selected.set({selected:false});
-        } else {
-            // @TODO: For the first change - from the default value to a new
-            // one - there's no event triggered. For now: Workaround and
-            // trigger it manually.
         }
         article.set({selected:true});
         this.selected = article;
@@ -51,13 +48,20 @@ var ArticleList = Backbone.Collection.extend({
 
     next: function () {
         var next = this.at(this.indexOf(this.selected) + 1);
-        if (typeof(next) !== 'undefined') this.select(next);
+        if (typeof(next) !== 'undefined') {
+            this.select(next);
+        } else {
+            this.page += 1;
+            this.fetch({data: {page: this.page}, remove: false});
+        }
         return this;
     },
 
     prev: function() {
         var prev = this.at(this.indexOf(this.selected) - 1);
-        if (typeof(prev) !== 'undefined') this.select(prev);
+        if (typeof(prev) !== 'undefined') {
+            this.select(prev);
+        }
         return this;
     },
 
@@ -90,21 +94,15 @@ var ArticleView = Backbone.View.extend({
 
     initialize: function() {
         this.render();
-        this.model.on('change:selected', this.selected, this);
+        this.model.on('change:selected', this.render, this);
     },
 
-    selected: function() {
+    render: function() {
         $('#content').html(render_template(
             'article-single', {article: this.model.attributes}));
-    },
-    
-    render: function() {
-        this.$el.attr('id', this.model.get('slug'))
-            .append($('<h2>').html(this.model.get('title')))
-            .append($('<span>').html(this.model.get('source')))
-            .append($('<div>').html(this.model.get('content')));
         return this;
     },
+
 });
 
 var ArticleListView = Backbone.View.extend({
