@@ -20,6 +20,8 @@ urlpatterns = patterns(
         name='backend-articles'),
     url("^api/articles$", ArticlesView.as_view(),
         name='articles-view'),
+    url(r'(?P<article_id>\d+)/$', "bericht.aggregator.views.article_detail",
+        name='article-detail'),
 
 
     # MEZZANINE'S URLS

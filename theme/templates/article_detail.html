@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block meta_title %}
+{{ article.title }}
+{% endblock %}
+
+{% block main %}
+<h1>{{ article.title }}</h1>
+{{ article.content|safe }}
+
+{% load comment_tags %}
+{% comments_for article %}
+{% endblock %}
