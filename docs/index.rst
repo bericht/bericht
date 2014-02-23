@@ -20,6 +20,7 @@ Contents:
    :maxdepth: 2
 
    installation
+   overview
    coding
    third-party
    
