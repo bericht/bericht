@@ -15,6 +15,9 @@ from django.db import models
 from django.dispatch import Signal, receiver
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
+
+from mezzanine.generic.fields import CommentsField
 
 logger = logging.getLogger(__name__)
 
@@ -171,7 +174,8 @@ class Item(models.Model):
     content = models.TextField(blank=True)
     #: This holds the HTML of the item link at the time it got parsed.
     link_html = models.TextField(blank=True)
-
+    comments = CommentsField()
+    
     def __unicode__(self):
         return "[%s] %s" % (self.feed.title, self.title)
 
@@ -182,6 +186,12 @@ class Item(models.Model):
     def get_content(self):
         return self.content or self.description
 
+    #: Temporary function while items are displayed @ frontpage, instead of 
+    #: articles
+    def get_absolute_url(self):
+        return reverse('bericht.aggregator.views.article_detail', 
+            args=[str(self.id)])
+    
     @classmethod
     def from_feed_entry(cls, feed, entry):
         item, new = cls.objects.get_or_create(

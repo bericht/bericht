@@ -3,6 +3,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework import generics
 from mezzanine.utils.views import render
 from django_filters import FilterSet
+from django.shortcuts import get_object_or_404
 
 from aggregator.models import Item
 from aggregator.serializers import ArticleSerializer
@@ -34,3 +35,8 @@ class ArticlesView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     filter_class = ArticleFilter
     paginate_by = 10
+
+# @TODO: Articles, not items
+def article_detail(request, article_id):
+    article = get_object_or_404(Item, pk=article_id)
+    return render(request, ['article_detail.html'], {'article': article})
