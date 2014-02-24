@@ -32,7 +32,7 @@ def parse_feed_file(sender, **kwargs):
 
 @receiver(parsed_item)
 def save_item(sender, **kwargs):
-    Item.from_feed_entry(sender, kwargs['entry'])
+    FeedItem.from_feed_entry(sender, kwargs['entry'])
 
 
 # @TODO Uses a blacklist by default, we might want to replace that with a
@@ -106,13 +106,13 @@ class FeedFile(models.Model):
 
         return self
 
-    def archive(self, url, content):
-        timestamp = datetime.now().strftime('%Y-%m-%d-%H-%M-%S.rss')
+    def archive(self, url, content, timestamp=datetime.now()):
+        filename = timestamp.strftime('%Y-%m-%d-%H-%M-%S.rss')
         directory = os.path.join(settings.ARCHIVE_DIR, slugify(url))
-        filename = os.path.join(directory, timestamp)
+        filepath = os.path.join(directory, filename)
         if not os.path.isdir(directory):
             os.makedirs(directory)
-        with open(filename, "w") as f:
+        with open(filepath, "w") as f:
             f.write(content)
 
     @classmethod
@@ -155,15 +155,15 @@ class Feed(models.Model):
         return feed
 
 
-class Item(models.Model):
-    #: The Feed this Item belongs to.
+class FeedItem(models.Model):
+    #: The Feed this FeedItem belongs to.
     feed = models.ForeignKey(Feed)
 
-    #: The title of the Item.
+    #: The title of the FeedItem.
     title = models.CharField(max_length=512)
-    #: The url this Item points to, courtesy of the link attribute.
+    #: The url this FeedItem points to, courtesy of the link attribute.
     link = models.URLField()
-    #: Tags that are provided in the Feed Item.
+    #: Tags that are provided in the FeedItem.
     tags = TaggableManager()
     #: Description is usually the teaser/summary, i.e. a shorter content.
     description = models.TextField()
@@ -175,7 +175,7 @@ class Item(models.Model):
     #: This holds the HTML of the item link at the time it got parsed.
     link_html = models.TextField(blank=True)
     comments = CommentsField()
-    
+
     def __unicode__(self):
         return "[%s] %s" % (self.feed.title, self.title)
 
@@ -186,12 +186,12 @@ class Item(models.Model):
     def get_content(self):
         return self.content or self.description
 
-    #: Temporary function while items are displayed @ frontpage, instead of 
+    #: Temporary function while items are displayed @ frontpage, instead of
     #: articles
     def get_absolute_url(self):
-        return reverse('bericht.aggregator.views.article_detail', 
-            args=[str(self.id)])
-    
+        return reverse('bericht.aggregator.views.article_detail',
+                       args=[str(self.id)])
+
     @classmethod
     def from_feed_entry(cls, feed, entry):
         item, new = cls.objects.get_or_create(

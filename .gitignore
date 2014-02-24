@@ -7,3 +7,4 @@ local_settings.py
 /static
 docs/_build
 /venv
+dev.db-journal

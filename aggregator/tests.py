@@ -42,3 +42,33 @@ class FeedFileTest(TestCase):
                          'the Python Web framework.</div>')
         self.assertIsInstance(feed.updated_at, datetime.datetime)
         self.assertIsInstance(feed.parsed_at, datetime.datetime)
+
+    def test_304_response(self):
+        """ If response status is 304, only FeedFile.updated_at should
+        change. """
+        self.fail('Complete HTTP 304 test for FeedFile.fetch()')
+
+    def test_etag_if_present(self):
+        """ Test that etag is stored correctly if set by server. """
+        self.fail('Complete ETag test if etag is present in response.')
+
+    def test_last_modified_if_present(self):
+        """ Test that last-modified is set correctly if provided
+        by response."""
+        self.fail('Complete last-modified test if present in response.')
+
+    def test_etag_if_absent(self):
+        """ Test that empty string is stored if etag is not provided. """
+        self.fail('Complete etag if absent test.')
+
+    def test_last_modified_if_absent(self):
+        """ Test that empty string is stored if last-modified header is
+        not provided. """
+        self.fail('Complete last-modified if absent test.')
+
+    def test_archiving(self):
+        """ Test that the archive is stored correctly. """
+        # TODO call FeedFile.archive(..) with manually set timestamp
+        # TODO verify that the file exists
+        # TODO verify that the file content is the same as the source file
+        self.fail('Complete archiving test.')
