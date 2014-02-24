@@ -33,15 +33,6 @@ class FeedFileTest(TestCase):
 
         with self.assertRaises(Feed.DoesNotExist):
             Feed.objects.get(feed_file=feed_file)
-        feed_file.fetch()
-        feed = Feed.objects.get(feed_file=feed_file)
-
-        self.assertEqual(feed.title, 'The Django weblog')
-        self.assertEqual(feed.link, 'https://www.djangoproject.com/weblog/')
-        self.assertEqual(feed.description, '<div>Latest news about Django, ' +
-                         'the Python Web framework.</div>')
-        self.assertIsInstance(feed.updated_at, datetime.datetime)
-        self.assertIsInstance(feed.parsed_at, datetime.datetime)
 
     def test_304_response(self):
         """ If response status is 304, only FeedFile.updated_at should
@@ -72,3 +63,31 @@ class FeedFileTest(TestCase):
         # TODO verify that the file exists
         # TODO verify that the file content is the same as the source file
         self.fail('Complete archiving test.')
+
+
+class FeedTest(TestCase):
+    """ Tests the parsing of a FeedFile into the Feed model. """
+
+    def setUp(self):
+        fixtures_dir = os.path.join(settings.PROJECT_ROOT,
+                                    'aggregator/fixtures/')
+        self.d = test.Daemon(staticdir=fixtures_dir)
+        self.valid_feed = os.path.join(fixtures_dir, 'django.rss')
+        url = self.d.p('200:b<"%s"' % self.valid_feed)
+        self.feed_file = FeedFile(url=url)
+
+    def tearDown(self):
+        self.d.shutdown()
+
+    def test_parsing(self):
+        """ Tests that feed title, link, description are correct and that
+        dates are parsed correctly. """
+        self.feed_file.fetch()
+        feed = Feed.objects.get(feed_file=self.feed_file)
+
+        self.assertEqual(feed.title, 'The Django weblog')
+        self.assertEqual(feed.link, 'https://www.djangoproject.com/weblog/')
+        self.assertEqual(feed.description, '<div>Latest news about Django, ' +
+                         'the Python Web framework.</div>')
+        self.assertIsInstance(feed.updated_at, datetime.datetime)
+        self.assertIsInstance(feed.parsed_at, datetime.datetime)
