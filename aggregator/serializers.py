@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from aggregator.models import Item
+from aggregator.models import FeedItem
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -9,6 +9,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     tags = serializers.CharField(source='tags.names', read_only=True)
 
     class Meta:
-        model = Item  # @TODO Article, not Item
+        model = FeedItem  # @TODO Article, not FeedItem
         fields = ('id', 'slug', 'title', 'tags', 'content', 'updated_at',
                   'source')

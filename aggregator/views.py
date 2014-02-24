@@ -5,13 +5,13 @@ from mezzanine.utils.views import render
 from django_filters import FilterSet
 from django.shortcuts import get_object_or_404
 
-from aggregator.models import Item
+from aggregator.models import FeedItem
 from aggregator.serializers import ArticleSerializer
 
 
 class ArticleFilter(FilterSet):
     class Meta:
-        model = Item  # @TODO Article, not Item
+        model = FeedItem  # @TODO Article, not FeedItem
         fields = ['title']
 
 
@@ -29,14 +29,14 @@ def article_list(request):
 # @TODO: authentification/permissions
 # @TODO: extra app for administrative views?
 # @TODO: pagination
-# @TODO: Articles, not Items
+# @TODO: Articles, not FeedItems
 class ArticlesView(generics.ListCreateAPIView):
-    queryset = Item.objects.order_by('-updated_at')
+    queryset = FeedItem.objects.order_by('-updated_at')
     serializer_class = ArticleSerializer
     filter_class = ArticleFilter
     paginate_by = 10
 
 # @TODO: Articles, not items
 def article_detail(request, article_id):
-    article = get_object_or_404(Item, pk=article_id)
+    article = get_object_or_404(FeedItem, pk=article_id)
     return render(request, ['article_detail.html'], {'article': article})
