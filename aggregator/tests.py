@@ -33,6 +33,7 @@ class FeedFileTest(TestCase):
 
         with self.assertRaises(Feed.DoesNotExist):
             Feed.objects.get(feed_file=feed_file)
+        feed_file.fetch()
 
     def test_304_response(self):
         """ If response status is 304, only FeedFile.updated_at should
