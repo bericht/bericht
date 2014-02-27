@@ -38,7 +38,12 @@ class FeedFileTest(TestCase):
     def test_304_response(self):
         """ If response status is 304, only FeedFile.updated_at should
         change. """
-        self.fail('Complete HTTP 304 test for FeedFile.fetch()')
+        url = self.d.p('304')
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # if status is 304, fetch return before sending file content to Feed:
+        with self.assertRaises(Feed.DoesNotExist):
+             Feed.objects.get(feed_file=feed_file)
 
     def test_etag_if_present(self):
         """ Test that etag is stored correctly if set by server. """
