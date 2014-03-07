@@ -9,6 +9,4 @@ following to small or medium-sized communities:
 * a open calendar system with ical import and export.
 * a forum in the style of popular question and answer sites.
 
-Documentation is available in the docs/ directory. You can either read the
-*.rst files or use `make html`/`make latexpdf` to get it in a more readable
-format.
+Documentation is available in the docs/ directory and on [readthedocs.org](http://bericht.readthedocs.org/en/latest/).
