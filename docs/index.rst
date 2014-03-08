@@ -21,7 +21,6 @@ Contents:
 
    overview
    installation
-   overview
    coding
    third-party
    
