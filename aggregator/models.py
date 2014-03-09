@@ -78,9 +78,13 @@ class FeedFile(models.Model):
         """
         logger.info("fetching feed at '%s'..." % self.url)
         try:
-            headers = {'user-agent': feedparser.USER_AGENT,
-                       'If-None-Match': self.etag,
-                       'If-Modified-Since': self.modified}
+            headers = {'user-agent': feedparser.USER_AGENT,}
+            # only set headers if they were set:
+            if self.etag != '':
+                headers['If-None-Match'] = self.etag
+            if self.modified != '':
+                headers['If-Modified-Since'] = self.modified
+
             req = requests.get(self.url, headers=headers, verify=False)
         except Exception as e:
             logger.error(e)
