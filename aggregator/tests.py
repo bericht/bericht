@@ -8,6 +8,7 @@ from libpathod import test
 
 from django.test import TestCase
 from django.conf import settings
+from django.template.defaultfilters import slugify
 
 from aggregator.models import FeedFile, Feed
 
@@ -82,7 +83,7 @@ class FeedFileTest(TestCase):
         """ Test that empty string is stored if last-modified header is
         not provided. """
         # set the last-modified header and supply working feed.
-        url = self.d.p('200:b<"%s":' % self.valid_feed)
+        url = self.d.p('200:b<"%s"' % self.valid_feed)
         feed_file = FeedFile(url=url)
         feed_file.fetch()
         self.assertEqual(feed_file.modified, '')
@@ -94,11 +95,20 @@ class FeedFileTest(TestCase):
 
     def test_archiving(self):
         """ Test that the archive is stored correctly. """
-        # TODO call FeedFile.archive(..) with manually set timestamp
-        # TODO verify that the file exists
-        # TODO verify that the file content is the same as the source file
-        self.fail('Complete archiving test.')
-
+        url = self.d.p('200:b<"%s"' % self.valid_feed)
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # call FeedFile.archive(..) with manually set timestamp
+        timestamp = datetime.datetime.now()
+        feed_file.archive(feed_file.url, feed_file.body, timestamp)
+        # verify that the file exists
+        filepath = os.path.join(os.path.join(settings.ARCHIVE_DIR, 
+                                             slugify(feed_file.url)), 
+                                timestamp.strftime('%Y-%m-%d-%H-%M-%S.rss'))
+        archived_feed = open(filepath, "r").read()
+        valid_feed_content = open(self.valid_feed, "r").read()
+        # verify that the file content is the same as the source file
+        self.assertEqual(valid_feed_content, archived_feed)
 
 class FeedTest(TestCase):
     """ Tests the parsing of a FeedFile into the Feed model. """
