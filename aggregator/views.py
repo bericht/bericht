@@ -36,6 +36,7 @@ class ArticlesView(generics.ListCreateAPIView):
     filter_class = ArticleFilter
     paginate_by = 10
 
+
 # @TODO: Articles, not items
 def article_detail(request, article_id):
     article = get_object_or_404(FeedItem, pk=article_id)

@@ -43,7 +43,7 @@ class FeedFileTest(TestCase):
         feed_file.fetch()
         # if status is 304, fetch return before sending file content to Feed:
         with self.assertRaises(Feed.DoesNotExist):
-             Feed.objects.get(feed_file=feed_file)
+            Feed.objects.get(feed_file=feed_file)
 
     def test_etag_if_present(self):
         """ Test that etag is stored correctly if set by server. """
