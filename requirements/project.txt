@@ -2,7 +2,7 @@ Mezzanine==3.0.4.
 Django==1.6.2
 requests==2.0.1
 feedparser==5.1.3
-django-taggit==0.10.0
+django-taggit==0.11.2
 South==0.8.4
 Sphinx==1.2
 BeautifulSoup==3.2.1
