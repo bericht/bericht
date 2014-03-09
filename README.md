@@ -12,3 +12,12 @@ following to small or medium-sized communities:
 Documentation is available in the docs/ directory. You can either read the
 *.rst files or use `make html`/`make latexpdf` to get it in a more readable
 format.
+
+---
+
+We are currently using a fork of django_behave which has not been merged into
+the mainline and due to [a bug in pip](https://github.com/pypa/pip/issues/713)
+it does not write the right version to requirements.txt. Please install it
+manually for the time being:
+
+    pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
