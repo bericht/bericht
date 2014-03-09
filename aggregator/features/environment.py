@@ -7,8 +7,7 @@ LOGGER.setLevel(WARNING)
 
 
 def before_all(context):
-    print(context.config.browser)
-    context.browser = Browser()
+    context.browser = Browser(context.config.browser or 'firefox')
 
 
 def after_all(context):
