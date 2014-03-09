@@ -245,6 +245,7 @@ INSTALLED_APPS = (
     "django.contrib.sitemaps",
     "django.contrib.staticfiles",
 
+    "django_behave",
     "taggit",
     "rest_framework",
     "mustachejs",

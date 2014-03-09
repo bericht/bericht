@@ -62,12 +62,17 @@ Tests
 -----
 
 Please write tests whenever you add or change functionality and run existing
-tests before you push. We use Djangos tools which are based on Pythons 
+tests before you push. We use `Djangos <https://docs.djangoproject.com/en/1.6/topics/testing/overview/>`_ tools which are based on Pythons 
 `unittest <http://docs.python.org/2.7/library/unittest.html#module-unittest>`_
-module. There is a `short overview
-<https://docs.djangoproject.com/en/1.6/topics/testing/overview/>`_ as well
-as a `longer tutorial
-<https://docs.djangoproject.com/en/1.6/intro/tutorial05/>`_ available on
-Djangos website.
+module for unit tests and `behave <http://pythonhosted.org/behave/>`_ and
+`splinter <http://splinter.cobrateam.info/docs/>`_ for acceptance testing.
+
+Run unit tests for the ``aggregator`` app with::
+
+  python manage.py test aggregator
+
+...and acceptance tests with::
+
+  python manage.py test aggregator --testrunner=utils.test_runner.AcceptanceTestSuiteRunner
 
 A test suite for client-side javascript tests must yet be chosen.
