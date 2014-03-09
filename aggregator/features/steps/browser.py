@@ -1,6 +1,13 @@
 from urlparse import urljoin
 
 from behave import given, when, then
+from django.core.management import call_command
+
+
+@given(u'we have some test data loaded from "{fixture}"')
+def we_have_some_test_data(context, fixture):
+    call_command('loaddata', fixture,
+                 **{'verbosity': 0, 'skip_validation': True})
 
 
 @given(u'the user accesses the url "{url}"')
