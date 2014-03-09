@@ -47,12 +47,36 @@ class FeedFileTest(TestCase):
 
     def test_etag_if_present(self):
         """ Test that etag is stored correctly if set by server. """
-        self.fail('Complete ETag test if etag is present in response.')
+        # set the Etag header and supply working feed.
+        etag = 'test_etag_if_present'
+        url = self.d.p('200:b<"%s":h"Etag"="%s"' %
+                       (self.valid_feed, etag))
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # check if the etag was saved at the FeedFile
+        self.assertEqual(feed_file.etag, etag)
+        # check that If-None-Match header is set at next request
+        feed_file.fetch()
+        headers = self.d.log()[:1][0]['request']['headers']
+        self.assertEqual(filter(lambda a: a[0] == 'If-None-Match',
+                                headers)[0][1], etag)
 
     def test_last_modified_if_present(self):
         """ Test that last-modified is set correctly if provided
         by response."""
-        self.fail('Complete last-modified test if present in response.')
+        # set the last-modified header and supply working feed.
+        last_modified = 'test_last-modified_if_present'
+        url = self.d.p('200:b<"%s":h"Last-Modified"="%s"' %
+                       (self.valid_feed, last_modified))
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # check if the etag was saved at the FeedFile
+        self.assertEqual(feed_file.modified, last_modified)
+        # check that If-None-Match header is set at next request
+        feed_file.fetch()
+        headers = self.d.log()[:1][0]['request']['headers']
+        self.assertEqual(filter(lambda a: a[0] == 'If-Modified-Since',
+                                headers)[0][1], last_modified)
 
     def test_etag_if_absent(self):
         """ Test that empty string is stored if etag is not provided. """
