@@ -10,7 +10,7 @@ from django.test import TestCase
 from django.conf import settings
 from django.template.defaultfilters import slugify
 
-from aggregator.models import FeedFile, Feed
+from aggregator.models import FeedFile, Feed, FeedItem
 
 
 class FeedFileTest(TestCase):
@@ -102,13 +102,23 @@ class FeedFileTest(TestCase):
         timestamp = datetime.datetime.now()
         feed_file.archive(feed_file.url, feed_file.body, timestamp)
         # verify that the file exists
-        filepath = os.path.join(os.path.join(settings.ARCHIVE_DIR, 
-                                             slugify(feed_file.url)), 
+        filepath = os.path.join(os.path.join(settings.ARCHIVE_DIR,
+                                             slugify(feed_file.url)),
                                 timestamp.strftime('%Y-%m-%d-%H-%M-%S.rss'))
         archived_feed = open(filepath, "r").read()
         valid_feed_content = open(self.valid_feed, "r").read()
         # verify that the file content is the same as the source file
         self.assertEqual(valid_feed_content, archived_feed)
+
+    def test_404_response(self):
+        self.fail("Complete test for 404 response.")
+
+    def test_500_response(self):
+        self.fail("Complete test for 500 response.")
+
+    def test_302_response(self):
+        self.fail("Complete test for 302.")
+
 
 class FeedTest(TestCase):
     """ Tests the parsing of a FeedFile into the Feed model. """
@@ -136,3 +146,11 @@ class FeedTest(TestCase):
                          'the Python Web framework.</div>')
         self.assertIsInstance(feed.updated_at, datetime.datetime)
         self.assertIsInstance(feed.parsed_at, datetime.datetime)
+
+    def test_number_items(self):
+        """ Tests that the feed parses all items, i.e. checks that the
+        number of items equals the number of entries of the feed file. """
+        self.feed_file.fetch()
+        feed = Feed.objects.get(feed_file=self.feed_file)
+        items = FeedItem.objects.filter(feed=feed)
+        self.assertEqual(len(items), 10)
