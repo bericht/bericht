@@ -13,4 +13,4 @@ before_script:
   - mkdir -p ~/bericht-data/static
 
 script:
-  - python setup.py test
+  - python manage.py test aggregator
