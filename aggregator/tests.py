@@ -8,8 +8,9 @@ from libpathod import test
 
 from django.test import TestCase
 from django.conf import settings
+from django.template.defaultfilters import slugify
 
-from aggregator.models import FeedFile, Feed
+from aggregator.models import FeedFile, Feed, FeedItem
 
 
 class FeedFileTest(TestCase):
@@ -47,27 +48,75 @@ class FeedFileTest(TestCase):
 
     def test_etag_if_present(self):
         """ Test that etag is stored correctly if set by server. """
-        pass
+        # set the Etag header and supply working feed.
+        etag = 'test_etag_if_present'
+        url = self.d.p('200:b<"%s":h"Etag"="%s"' %
+                       (self.valid_feed, etag))
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # check if the etag was saved at the FeedFile
+        self.assertEqual(feed_file.etag, etag)
+        # check that If-None-Match header is set at next request
+        feed_file.fetch()
+        headers = self.d.log()[:1][0]['request']['headers']
+        self.assertEqual(filter(lambda a: a[0] == 'If-None-Match',
+                                headers)[0][1], etag)
 
     def test_last_modified_if_present(self):
         """ Test that last-modified is set correctly if provided
         by response."""
-        pass
+        # set the last-modified header and supply working feed.
+        last_modified = 'test_last-modified_if_present'
+        url = self.d.p('200:b<"%s":h"Last-Modified"="%s"' %
+                       (self.valid_feed, last_modified))
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # check if the Last-Modified was saved at the FeedFile
+        self.assertEqual(feed_file.modified, last_modified)
+        # check that If-None-Match header is set at next request
+        feed_file.fetch()
+        headers = self.d.log()[:1][0]['request']['headers']
+        self.assertEqual(filter(lambda a: a[0] == 'If-Modified-Since',
+                                headers)[0][1], last_modified)
 
-    def test_etag_if_absent(self):
-        """ Test that empty string is stored if etag is not provided. """
-        pass
-
-    def test_last_modified_if_absent(self):
+    def test_headers_if_absent(self):
         """ Test that empty string is stored if last-modified header is
         not provided. """
-        pass
+    # set the last-modified header and supply working feed.
+        url = self.d.p('200:b<"%s"' % self.valid_feed)
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        self.assertEqual(feed_file.modified, '')
+        # check that If-None-Match header is set at next request
+        feed_file.fetch()
+        headers = self.d.log()[:1][0]['request']['headers']
+        self.assertFalse([u'If-None-Match', u''] in headers)
+        self.assertFalse([u'If-Modified-Since', u''] in headers)
 
     def test_archiving(self):
         """ Test that the archive is stored correctly. """
-        # TODO call FeedFile.archive(..) with manually set timestamp
-        # TODO verify that the file exists
-        # TODO verify that the file content is the same as the source file
+        url = self.d.p('200:b<"%s"' % self.valid_feed)
+        feed_file = FeedFile(url=url)
+        feed_file.fetch()
+        # call FeedFile.archive(..) with manually set timestamp
+        timestamp = datetime.datetime.now()
+        feed_file.archive(feed_file.url, feed_file.body, timestamp)
+        # verify that the file exists
+        filepath = os.path.join(os.path.join(settings.ARCHIVE_DIR,
+                                             slugify(feed_file.url)),
+                                timestamp.strftime('%Y-%m-%d-%H-%M-%S.rss'))
+        archived_feed = open(filepath, "r").read()
+        valid_feed_content = open(self.valid_feed, "r").read()
+        # verify that the file content is the same as the source file
+        self.assertEqual(valid_feed_content, archived_feed)
+
+    def test_404_response(self):
+        pass
+
+    def test_500_response(self):
+        pass
+
+    def test_302_response(self):
         pass
 
 
@@ -97,3 +146,11 @@ class FeedTest(TestCase):
                          'the Python Web framework.</div>')
         self.assertIsInstance(feed.updated_at, datetime.datetime)
         self.assertIsInstance(feed.parsed_at, datetime.datetime)
+
+    def test_number_items(self):
+        """ Tests that the feed parses all items, i.e. checks that the
+        number of items equals the number of entries of the feed file. """
+        self.feed_file.fetch()
+        feed = Feed.objects.get(feed_file=self.feed_file)
+        items = FeedItem.objects.filter(feed=feed)
+        self.assertEqual(len(items), 10)
