@@ -1,0 +1,16 @@
+language: python
+env:
+- DJANGO_VERSION=1.6.2
+python:
+  - "2.7"
+install:
+  - pip install -r requirements/project.txt
+  - pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
+
+before_script:
+  - cp ./deploy/travis_settings.py ./local_settings.py
+  - mkdir -p ~/bericht-data/media
+  - mkdir -p ~/bericht-data/static
+
+script:
+  - python setup.py test
