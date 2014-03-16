@@ -1,6 +1,8 @@
 Bericht
 =======
 
+[![Build Status](https://travis-ci.org/bericht/bericht.png?branch=master)](https://travis-ci.org/bericht/bericht)
+
 Is the codename for a custom django project, aiming to provide the
 following to small or medium-sized communities:
 
