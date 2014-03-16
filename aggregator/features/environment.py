@@ -18,7 +18,6 @@ def before_all(context):
                                                              access_key)
         capabilities = {
             'tunnel_identifier': os.environ['TRAVIS_JOB_NUMBER'],
-            'url': server_url,
             'platform': 'Linux',
         }
         context.browser = Browser('remote', server_url, **capabilities)
