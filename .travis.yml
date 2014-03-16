@@ -1,6 +1,7 @@
 language: python
 env:
 - DJANGO_VERSION=1.6.2
+- PYTHONPATH=$HOME/bericht
 python:
   - "2.7"
 install:
@@ -8,10 +9,10 @@ install:
   - pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
 
 before_script:
+  - pwd
   - cp ./deploy/travis_settings.py ./local_settings.py
   - mkdir -p ~/bericht-data/media
   - mkdir -p ~/bericht-data/static
 
 script:
-  - export PYTHONPATH=$PYTHONPATH:$HOME/bericht
   - python manage.py test aggregator
