@@ -15,3 +15,9 @@ before_script:
 
 script:
   - python manage.py test aggregator
+  - python manage.py test aggregator --testrunner=utils.test_runner.AcceptanceTestSuiteRunner
+
+addons:
+  sauce_connect:
+    username: "bericht"
+    secure: "doVdgRnppN/mofGU/+HWMr18ZDaCTf8TRSjjtjO4+VPLdNGp79lEOvx3U2DT6xjWDhB1Q3eIpgNei7LniW/PCIM5I0iTUKMDEKUBwD91pu7iMukGWKkaCa9/Ewh2YkYt1JBbXclRDN/4pQRmcgeOwsULfGu5ev+Q0RtkUnK7EPA="
