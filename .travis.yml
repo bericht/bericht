@@ -20,4 +20,5 @@ script:
 addons:
   sauce_connect:
     username: "bericht"
-    secure: "doVdgRnppN/mofGU/+HWMr18ZDaCTf8TRSjjtjO4+VPLdNGp79lEOvx3U2DT6xjWDhB1Q3eIpgNei7LniW/PCIM5I0iTUKMDEKUBwD91pu7iMukGWKkaCa9/Ewh2YkYt1JBbXclRDN/4pQRmcgeOwsULfGu5ev+Q0RtkUnK7EPA="
+    access_key:
+      secure: "SB8umrDINdDmuNrahxTyawR0kwbqVtMYvn/5VhMWKramuCUnOh3DRgR2F7qmizAZbC9ygKk9mv90XKXBBSbfvtwG0t+AuYEZpMgvdPQ/NVunUoC4fXalu799YhOQz/gnc8smje2vhfnI+xCG1sMKBJ84dz/M51/sIafVmaDxTMw="
