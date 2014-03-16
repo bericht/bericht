@@ -8,10 +8,10 @@ install:
   - pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
 
 before_script:
-  - export PYTHONPATH=$PYTHONPATH:$HOME/bericht
   - cp ./deploy/travis_settings.py ./local_settings.py
   - mkdir -p ~/bericht-data/media
   - mkdir -p ~/bericht-data/static
 
 script:
+  - export PYTHONPATH=$PYTHONPATH:$HOME/bericht
   - python manage.py test aggregator
