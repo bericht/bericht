@@ -17,7 +17,6 @@ def before_all(context):
         server_url = 'http://%s:%s@localhost:4445/wd/hub' % (username,
                                                              access_key)
         capabilities = {
-            'driver_name': 'remote',
             'tunnel_identifier': os.environ['TRAVIS_JOB_NUMBER'],
             'url': server_url,
             'platform': 'Linux',
