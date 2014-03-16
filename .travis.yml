@@ -1,7 +1,6 @@
 language: python
 env:
-- DJANGO_VERSION=1.6.2
-- PYTHONPATH=$HOME/bericht
+- DJANGO_VERSION=1.6.2 PYTHONPATH=$HOME/build/bericht
 python:
   - "2.7"
 install:
