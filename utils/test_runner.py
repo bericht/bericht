@@ -1,7 +1,9 @@
+import os
 import unittest
 
 from django_behave import runner
 
+os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = 'localhost:9090'
 
 class AcceptanceTestSuiteRunner(runner.DjangoBehaveTestSuiteRunner):
     def build_suite(self, test_labels, extra_tests=None, **kwargs):
