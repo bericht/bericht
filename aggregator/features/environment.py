@@ -14,8 +14,8 @@ def before_all(context):
     access_key = os.environ.get('SAUCE_ACCESS_KEY')
 
     if username and access_key:
-        server_url = 'http://%s:%s@localhost:4445/wd/hub' % (username,
-                                                             access_key)
+        server_url = 'http://%s:%s@ondemand.saucelabs.com/wd/hub' % (
+            username, access_key)
         capabilities = {
             'tunnel_identifier': os.environ['TRAVIS_JOB_NUMBER'],
             'platform': 'Linux',
