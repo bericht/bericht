@@ -252,6 +252,7 @@ INSTALLED_APPS = (
 
     "bericht.theme",
     "bericht.aggregator",
+    "bericht.debates",
 
     "mezzanine.boot",
     "mezzanine.conf",
@@ -265,6 +266,8 @@ INSTALLED_APPS = (
     #"mezzanine.accounts",
     #"mezzanine.mobile",
 )
+
+COMMENTS_APP = "bericht.debates"
 
 # List of processors used by RequestContext to populate the context.
 # Each one should be a callable that takes the request object as its
