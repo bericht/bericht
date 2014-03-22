@@ -43,6 +43,8 @@ several other content types.
 * **Static Page** are for some static stuff, like 'About', 'Contact', 'Terms of 
   Service', etc. 
 
+*Static Pages* and *Comments* are provided by mezzanine, *Entry* is, together 
+with the *voting system* and the *front page* contained in an app. 
 
 Articles
 --------
