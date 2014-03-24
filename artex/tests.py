@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Tests for the Article Extractor artex.
 
@@ -24,3 +25,11 @@ class ArticleTest(TestCase):
         self.assertEqual(article.title, 'Security advisory: strip_tags safety')
         self.assertEqual(article.content[:20], '<p>We\'ve received a ')
         self.assertEqual(article.content[-10:], ', 2014</p>')
+
+    def test_Artex_wordpress(self):
+        html_file = os.path.join(self.fixtures_dir, 'wordpress-blogpost.html')
+        html = open(html_file, 'r').read()
+        article = Article(html)
+        self.assertEqual(article.title, u'WordPress 3.8 “Parker”')
+        self.assertEqual(article.content[:20], '<p>Version 3.8 of Wo')
+        self.assertEqual(article.content[-20:], 'for version 3.9!</p>')

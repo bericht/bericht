@@ -29,9 +29,21 @@ class Article():
         self.content = self._cleanup(html_tree, self.title)
 
     def _cleanup(self, root, title):
-        # remove redundant outmost divs until one remains as root
-        while root.tag == 'div' and len(list(root)) == 1:
-            root = root[0]
+        """
+        Remove redundant outmost divs until one remains as root. Also check 
+        if the div contains text that is not wrapped in other elements so
+        that we don't loose the content. Also remove headers at the start if 
+        they contain the title of the article. 
+        """
+        # remove outer redundant divs
+        while root.tag == 'div' and \
+              len(list(root)) == 1:
+            # make sure there is no non-whitespace content beyond children
+            if (root.text is None or root.text.strip() == '') and \
+               root[len(list(root))-1].tail.strip() == '':
+                root = root[0]
+            else:
+                break;
         # if the first child is a header and its text equals the title
         # it is redundant and gets removed.
         if root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
