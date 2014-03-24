@@ -1,4 +1,5 @@
 from readability import Document
+from lxml import etree
 
 
 class Article():
@@ -13,10 +14,28 @@ class Article():
     def __init__(self, html):
         """ Sets the article html. """
         self.html = html
-        self.__extract()
+        self._extract()
 
-    def __extract(self):
+    def _extract(self):
         doc = Document(self.html,
                        negative_keywords=self.negative_keywords)
         self.title = doc.short_title()
-        self.content = doc.summary(html_partial=True)
+
+        # invoke the summary method to invoke readability's magic
+        doc.summary(html_partial=True)
+        # obtain the article as HtmlElement tree:
+        html_tree = doc.html
+        # clean up the article html:
+        self.content = self._cleanup(html_tree, self.title)
+
+    def _cleanup(self, root, title):
+        # remove redundant outmost divs until one remains as root
+        while root.tag == 'div' and len(list(root)) == 1:
+            root = root[0]
+        # if the first child is a header and its text equals the title
+        # it is redundant and gets removed.
+        if root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
+           root[0].text == title:
+            root = root[1:]
+        return u''.join(map(lambda a: etree.tostring(a).strip(),
+                            list(root)))

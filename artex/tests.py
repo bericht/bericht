@@ -21,5 +21,6 @@ class ArticleTest(TestCase):
         html_file = os.path.join(self.fixtures_dir, 'django-blogpost.html')
         html = open(html_file, 'r').read()
         article = Article(html)
-        # print(article.title)
         self.assertEqual(article.title, 'Security advisory: strip_tags safety')
+        self.assertEqual(article.content[:20], '<p>We\'ve received a ')
+        self.assertEqual(article.content[-10:], ', 2014</p>')
