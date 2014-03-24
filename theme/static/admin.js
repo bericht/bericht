@@ -8,15 +8,6 @@ $(document).ready(function() {
     window.bericht = window.bericht || {};
     window.bericht.articles = articles = new ArticleList();
     new ArticleListView({collection: articles});
-
-    keys = {
-        'j': articles.next,
-        'k': articles.prev,
-    };
-    
-    $.each(keys, function(key, fn) {
-        $(document).bind('keypress.'+key, fn);
-    });
 });
 
 var render_template = function (name, context) {
@@ -35,7 +26,7 @@ var ArticleList = Backbone.Collection.extend({
     page: 1,
 
     initialize: function() {
-        _.bindAll(this, 'select', 'next', 'prev');
+        _.bindAll(this, 'select', 'next', 'prev', 'next_page', 'prev_page');
     },
 
     select: function(article) {
@@ -50,22 +41,35 @@ var ArticleList = Backbone.Collection.extend({
         var next = this.at(this.indexOf(this.selected) + 1);
         if (typeof(next) !== 'undefined') {
             this.select(next);
-        } else {
-            this.page += 1;
-            this.fetch({data: {page: this.page}, remove: false});
-        }
+        } else if (this.next_url) { this.next_page(); }
         return this;
+    },
+
+    next_page: function() {
+        this.url = this.next_url;
+        this.fetch().done(_.bind(function() {
+            this.select(this.first());
+        }, this));
     },
 
     prev: function() {
         var prev = this.at(this.indexOf(this.selected) - 1);
         if (typeof(prev) !== 'undefined') {
             this.select(prev);
-        }
+        } else if (this.prev_url) { this.prev_page(); }
         return this;
     },
 
+    prev_page: function() {
+        this.url = this.prev_url;
+        this.fetch().done(_.bind(function() {
+            this.select(this.last());
+        }, this));
+    },
+
     parse: function(response) {
+        this.prev_url = response.previous;
+        this.next_url = response.next;
         return response.results;
     },
 });
@@ -76,6 +80,9 @@ var ArticleSidebarView = Backbone.View.extend({
 
     initialize: function() {
         this.model.collection.on('change:selected', this.render, this);
+        this.model.on('remove', _.bind(function(model, collection, options) {
+            this.remove();
+        }, this));
     },
 
     render: function() {
@@ -91,10 +98,12 @@ var ArticleSidebarView = Backbone.View.extend({
 });
 
 var ArticleView = Backbone.View.extend({
-
     initialize: function() {
         this.render();
         this.model.on('change:selected', this.render, this);
+        this.model.on('remove', _.bind(function(model, collection, options) {
+            this.remove();
+        }, this));
     },
 
     render: function() {
@@ -102,7 +111,6 @@ var ArticleView = Backbone.View.extend({
             'article-single', {article: this.model.attributes}));
         return this;
     },
-
 });
 
 var ArticleListView = Backbone.View.extend({
@@ -112,6 +120,17 @@ var ArticleListView = Backbone.View.extend({
         this.collection.on('reset', this.addAll, this);
         this.collection.on('add', this.addOne, this);
         this.collection.fetch({reset: true});
+
+        keys = {
+            'k': this.collection.prev,
+            'j': this.collection.next,
+        };
+        $.each(keys, function(key, fn) {
+            $(document).bind('keypress.'+key, fn);
+        });
+
+        $('#sidebar .pager .previous a').click(this.collection.prev_page);
+        $('#sidebar .pager .next a').click(this.collection.next_page);
     },
 
     addAll: function() {
