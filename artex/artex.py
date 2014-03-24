@@ -15,7 +15,7 @@ def contains_text(element):
     return False
 
 
-def cleanup(root, title):
+def cleanup(root, title=None):
     """
     Remove redundant outmost divs until one remains as root. Also check
     if the div contains text that is not wrapped in other elements so
@@ -31,11 +31,16 @@ def cleanup(root, title):
             break
     # if the first child is a header and its text equals the title
     # it is redundant and gets removed.
-    if root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
+    if title and \
+       root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
        root[0].text == title:
-        root = root[1:]
-    return u''.join(map(lambda a: etree.tostring(a).strip(),
-                        list(root)))
+        root.remove(root[0])
+    result = u''
+    if root.text is not None:
+        result += root.text
+    for elem in list(root):
+        result += etree.tostring(elem)
+    return result.strip()
 
 
 class Article():

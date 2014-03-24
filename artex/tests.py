@@ -54,3 +54,12 @@ class ArticleTest(TestCase):
         """Tests that text in the outer div before a p is retained."""
         html = '<div><p>This is text. </p>This is valuable text.</div>'
         self.assertTrue(artex.contains_text(etree.fromstring(html)))
+
+    def test_cleanup_and_text_between_children(self):
+        """
+        Tests that cleanup maintains text between children of enclosing
+        div.
+        """
+        html = '<div>text <p>text </p>text <p>text </p>text</div>'
+        target = 'text <p>text </p>text <p>text </p>text'
+        self.assertEqual(artex.cleanup(etree.fromstring(html)), target)
