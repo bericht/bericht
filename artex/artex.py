@@ -14,6 +14,24 @@ def contains_text(element):
             return True
     return False
 
+footer_terms = ['postmetadata', 'metadata', 'meta']
+
+
+def elem_attr_contain(elem, terms):
+    """
+    Returns True if an element's id or class contains one of the given
+    terms.
+    """
+    if elem.get('id') is not None and \
+       len(list(set(elem.get('id').split(' ')) &
+                set(terms))) > 0:
+        return True
+    elif elem.get('class') is not None and \
+        len(list(set(elem.get('class').split(' ')) &
+                 set(terms))) > 0:
+        return True
+    return False
+
 
 def cleanup(root, title=None):
     """
@@ -36,9 +54,25 @@ def cleanup(root, title=None):
        root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
        root[0].text == title:
         root.remove(root[0])
+    # check if the elements towards the end can be identified as ads or
+    # post metadata
+    while len(list(root)) > 1:
+        last_elem = root[len(list(root))-1]
+        if last_elem.text.strip() == '':
+            root.remove(elem_attr)
+            continue
+        if elem_attr_contain(last_elem, footer_terms):
+            root.remove(elem_attr)
+        else:
+            break
     return root
 
+
 def elem_content_to_string(root):
+    """
+    Converts all content wrapped by an element to a string (i.e. all child
+    elements and text before, after and between them).
+    """
     result = u''
     if root.text is not None and root.tag == 'div':
         result += root.text
@@ -80,7 +114,11 @@ class Article():
         # clean up the article html:
         clean_html = cleanup(html_tree, self.title)
         # check if the outer element is a tag from negative_keywords
-        if clean_html.tag in self.negative_keywords:
+        if elem_attr_contain(clean_html, self.negative_keywords):
+            bad_attr = True
+        else:
+            bad_attr = False
+        if clean_html.tag in self.negative_keywords or bad_attr:
             # if so, redo extraction with different min_text_length
             doc = Document(self.html,
                            negative_keywords=self.negative_keywords,
