@@ -63,3 +63,24 @@ class ArticleTest(TestCase):
         html = '<div>text <p>text </p>text <p>text </p>text</div>'
         target = 'text <p>text </p>text <p>text </p>text'
         self.assertEqual(artex.cleanup(etree.fromstring(html)), target)
+
+    def test_title_handling(self):
+        """
+        Tests that, if a title is given when calling Article, the extracted
+        title is only accepted if it is contained in the given title. This
+        is for the usage scenario of urls coming from news feeds, etc. where
+        the title might be known - even if it contains the site name.
+        """
+        html = '''
+        <html><body>
+        <div><h1>Blog Title: Blog Post</h1></div>
+        <div id="main">
+        <p>This is the main text to be extracted.</p>
+        </div>
+        </body></html>
+        '''
+        title = 'Blog Post'
+        article = Article(html, title)
+        self.assertEqual('<p>This is the main text to be extracted.</p>',
+                article.content)
+        self.assertEqual(title, article.title)
