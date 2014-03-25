@@ -29,13 +29,19 @@ Articles
 
 {% block custom_layout %}
     <div class="row">
+      <ul class="menu nav nav-tabs">
+        <li class="active"><a href="#">New</a></li>
+        <li><a href="#">Downvoted</a></li>
+        <li><a href="#">Published</a></li>
+      </ul>
+    </div>
+    <div class="row">
       <div id="sidebar" class="col-md-3 left">
+        <ul id="sidebar-list">
+        </ul>
         <ul class="pager small">
           <li class="next"><a href="#">Older &rarr;</a></li>
           <li class="previous"><a href="#">&larr; Newer</a></li>
-        </ul>
-
-        <ul id="sidebar-list">
         </ul>
       </div>
       <div id="content" class="col-md-9 middle">
