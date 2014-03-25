@@ -62,7 +62,8 @@ class ArticleTest(TestCase):
         """
         html = '<div>text <p>text </p>text <p>text </p>text</div>'
         target = 'text <p>text </p>text <p>text </p>text'
-        self.assertEqual(artex.cleanup(etree.fromstring(html)), target)
+        self.assertEqual(artex.elem_content_to_string(
+            artex.cleanup(etree.fromstring(html))), target)
 
     def test_title_handling(self):
         """
@@ -82,5 +83,5 @@ class ArticleTest(TestCase):
         title = 'Blog Post'
         article = Article(html, title)
         self.assertEqual('<p>This is the main text to be extracted.</p>',
-                article.content)
+                         article.content)
         self.assertEqual(title, article.title)

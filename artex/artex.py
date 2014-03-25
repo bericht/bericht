@@ -32,9 +32,13 @@ def cleanup(root, title=None):
     # if the first child is a header and its text equals the title
     # it is redundant and gets removed.
     if title and \
+       len(list(root)) > 0 and \
        root[0].tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] and \
        root[0].text == title:
         root.remove(root[0])
+    return root
+
+def elem_content_to_string(root):
     result = u''
     if root.text is not None and root.tag == 'div':
         result += root.text
@@ -69,11 +73,24 @@ class Article():
         doc = Document(self.html,
                        negative_keywords=self.negative_keywords)
         self.title = doc.short_title()
-
         # invoke the summary method to invoke readability's magic
         doc.summary(html_partial=True)
         # obtain the article as HtmlElement tree:
         html_tree = doc.html
         # clean up the article html:
-        self.content = cleanup(html_tree, self.title)
+        clean_html = cleanup(html_tree, self.title)
+        # check if the outer element is a tag from negative_keywords
+        if clean_html.tag in self.negative_keywords:
+            # if so, redo extraction with different min_text_length
+            doc = Document(self.html,
+                           negative_keywords=self.negative_keywords,
+                           min_text_length=self.min_text_length_fallback)
+            self.title = doc.short_title()
+            # invoke the summary method to invoke readability's magic
+            doc.summary(html_partial=True)
+            # obtain the article as HtmlElement tree:
+            html_tree = doc.html
+            # clean up the article html:
+            clean_html = cleanup(html_tree, self.title)
+        self.content = elem_content_to_string(clean_html)
         #self.content = doc.summary(html_partial=True)
