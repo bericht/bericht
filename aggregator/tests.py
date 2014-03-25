@@ -82,7 +82,7 @@ class FeedFileTest(TestCase):
     def test_headers_if_absent(self):
         """ Test that empty string is stored if last-modified header is
         not provided. """
-    # set the last-modified header and supply working feed.
+        # set the last-modified header and supply working feed.
         url = self.d.p('200:b<"%s"' % self.valid_feed)
         feed_file = FeedFile(url=url)
         feed_file.fetch()
