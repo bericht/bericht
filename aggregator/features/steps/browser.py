@@ -10,25 +10,29 @@ def we_have_some_test_data(context, fixture):
                  **{'verbosity': 0, 'skip_validation': True})
 
 
-@given(u'the user accesses the url "{url}"')
+@when(u'the user accesses the url "{url}"')
 def the_user_accesses_the_url(context, url):
     full_url = urljoin(context.config.server_url, url)
     context.browser.visit(full_url)
 
 
+@when(u'the user clicks on the link "{label}"')
+def the_user_clicks_on_the_link(context, label):
+    context.browser.find_link_by_partial_text(label)[0].click()
+
+
 @then(u'she should see {expected:d} articles in the sidebar')
 def she_should_see_articles(context, expected):
-    #context.browser.is_element_present_by_css('#sidebar li', wait_time=3)
-    found = len(context.browser.find_by_css('#sidebar li'))
-    assert found == int(expected), 'expected %r articles, found %r' \
-        % (int(expected), found)
+    found = len(context.browser.find_by_css('#sidebar-list li'))
+    assertEqual(found, int(expected), 'expected %r articles, found %r'
+                % (int(expected), found))
 
 
-@when('we implement a test')
-def implement_a_test(context):
-    assert True is not False
+@then(u'the {number:d}. article should have the title "{title}"')
+def the_article_should_have_the_title(context, number, title):
+    entry = context.browser.find_by_css('#sidebar-list li')[number-1]
+    assertEqual(entry.text, title)
 
 
-@then('behave will test it for us')
-def behave_will_test(context):
-    assert context.failed is False
+def assertEqual(first, second, msg=None):
+    assert first == second, msg or "%r != %r" % (first, second)
