@@ -28,7 +28,6 @@ def article_list(request):
 
 # @TODO: authentification/permissions
 # @TODO: extra app for administrative views?
-# @TODO: pagination
 # @TODO: Articles, not FeedItems
 class ArticlesView(generics.ListCreateAPIView):
     queryset = FeedItem.objects.order_by('-updated_at')
