@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from rest_framework.renderers import JSONRenderer
 from rest_framework import generics
 from mezzanine.utils.views import render
 from django_filters import FilterSet
@@ -15,17 +13,6 @@ class ArticleFilter(FilterSet):
         fields = ['title']
 
 
-class JSONResponse(HttpResponse):
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super(JSONResponse, self).__init__(content, **kwargs)
-
-
-def article_list(request):
-    return render(request, ['article_list.html'])
-
-
 # @TODO: authentification/permissions
 # @TODO: extra app for administrative views?
 # @TODO: Articles, not FeedItems
@@ -34,6 +21,10 @@ class ArticlesView(generics.ListCreateAPIView):
     serializer_class = ArticleSerializer
     filter_class = ArticleFilter
     paginate_by = 10
+
+
+def article_list(request):
+    return render(request, ['article_list.html'])
 
 
 # @TODO: Articles, not items
