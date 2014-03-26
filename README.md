@@ -11,11 +11,5 @@ following to small or medium-sized communities:
 * a open calendar system with ical import and export.
 * a forum in the style of popular question and answer sites.
 
-Documentation is available in the docs/ directory and on [readthedocs.org](http://bericht.readthedocs.org/en/latest/).
-
-We are currently using a fork of django_behave which has not been merged into
-the mainline and due to [a bug in pip](https://github.com/pypa/pip/issues/713)
-it does not write the right version to requirements.txt. Please install it
-manually for the time being:
-
-    pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
+Documentation is available in the docs/ directory and on
+[readthedocs.org](http://bericht.readthedocs.org/en/latest/).
