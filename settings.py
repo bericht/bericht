@@ -322,6 +322,15 @@ OPTIONAL_APPS = (
     PACKAGE_NAME_GRAPPELLI,
 )
 
+
+##################
+# ARTEX SETTINGS #
+##################
+
+ARTEX_NEGATIVE_KEYWORDS = ['widget', 'aside', 'sidebar', 'metadata', 'cmnt',
+                           'comment', 'adsense', 'advert', 'widget_text']
+ARTEX_METADATA_TERMS = ['postmetadata', 'metadata', 'meta']
+
 ###################
 # DEPLOY SETTINGS #
 ###################
@@ -356,7 +365,7 @@ OPTIONAL_APPS = (
 # ignored in your version control system allowing for settings to be
 # defined per machine.
 try:
-    from local_settings import * # flake8: noqa
+    from local_settings import *  # flake8: noqa
 except ImportError:
     pass
 

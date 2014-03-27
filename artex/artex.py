@@ -1,5 +1,6 @@
 from readability import Document
 from lxml import etree
+from django.conf import settings
 
 
 def contains_text(element):
@@ -13,8 +14,6 @@ def contains_text(element):
         if child.tail is not None and child.tail.strip() != '':
             return True
     return False
-
-footer_terms = ['postmetadata', 'metadata', 'meta']
 
 
 def elem_attr_contain(elem, terms):
@@ -61,7 +60,7 @@ def cleanup(root, title=None):
         if last_elem.text.strip() == '':
             root.remove(elem_attr)
             continue
-        if elem_attr_contain(last_elem, footer_terms):
+        if elem_attr_contain(last_elem, settings.ARTEX_METADATA_TERMS):
             root.remove(elem_attr)
         else:
             break
@@ -88,9 +87,6 @@ class Article():
     Wraps around readability.Document and provides access to the article
     title and content.
     """
-    negative_keywords = ['widget', 'aside', 'sidebar', 'metadata', 'cmnt',
-                         'comment', 'adsense', 'advert', 'widget_text']
-    min_text_length_fallback = 0
 
     def __init__(self, html, title=None):
         """ Sets the article html. """
@@ -105,7 +101,7 @@ class Article():
 
     def _extract(self):
         doc = Document(self.html,
-                       negative_keywords=self.negative_keywords)
+                       negative_keywords=settings.ARTEX_NEGATIVE_KEYWORDS)
         self.title = doc.short_title()
         # invoke the summary method to invoke readability's magic
         doc.summary(html_partial=True)
@@ -114,15 +110,15 @@ class Article():
         # clean up the article html:
         clean_html = cleanup(html_tree, self.title)
         # check if the outer element is a tag from negative_keywords
-        if elem_attr_contain(clean_html, self.negative_keywords):
+        if elem_attr_contain(clean_html, settings.ARTEX_NEGATIVE_KEYWORDS):
             bad_attr = True
         else:
             bad_attr = False
-        if clean_html.tag in self.negative_keywords or bad_attr:
-            # if so, redo extraction with different min_text_length
+        if clean_html.tag in settings.ARTEX_NEGATIVE_KEYWORDS or bad_attr:
+            # if so, redo extraction with min_text_length set to 0
             doc = Document(self.html,
-                           negative_keywords=self.negative_keywords,
-                           min_text_length=self.min_text_length_fallback)
+                           negative_keywords=settings.ARTEX_NEGATIVE_KEYWORDS,
+                           min_text_length=0)
             self.title = doc.short_title()
             # invoke the summary method to invoke readability's magic
             doc.summary(html_partial=True)
