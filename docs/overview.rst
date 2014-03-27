@@ -54,7 +54,7 @@ are shown to the public and users. We decided not to use abstract article as a
 common parent class to reduce complexity, instead use Entry (see at the top).
 
 * **Article** is authored on Bericht
-* **ImportedArticle** is created from a news feed item (*FeedItem*)
+* **ImportedArticle** is created from a news feed item (*FeedItem*) and holds the feed item's link HTML
 
 
 Q & A
@@ -148,8 +148,7 @@ Aggregator
 
 Aggregator takes care of importing content from news feeds. This should be as 
 much separated from *ImportedArticle* as possible: Aggregator models store the 
-"original" data, while *ImportedArticle* (which can be created from *FeedItem*) 
-should be what is being displayed and maybe edited/augmented (with additional 
+"original" data from the news feed, while *ImportedArticle* (which is created from *FeedItem*) fetches the link's HTML and runs the article extraction. *ImportedArticle* is what is being displayed and maybe edited/augmented (with additional 
 tags, better teaser, fixed content, etc.)
 
 * **FeedFile** stores the feed file and archives it, time-stamped
