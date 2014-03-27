@@ -165,3 +165,13 @@ Artex: Article Extraction
 
 .. _readability-lxml: https://github.com/buriy/python-readability/
 .. _arc90: http://lab.arc90.com/2009/03/02/readability/
+
+
+Source Re-Check
+---------------
+
+Often it happens that blog posts, articles, etc. get modified (shortly) after their first publishing. Often these changes are meaningful, e.g. correction of facts, additional relevant information, etc. 
+
+The goal for bericht is, on the one hand, to quickly show new content. On the other hand, we want to reflect these changes. To accomplish this, we re-run the article extraction *n* hours after the first import. 
+
+As editors can manually edit an *ImportedArticle*, these manual changes could get lost if the content was simply overridden. To prevent this, the editors get a notification if there is an update at the source for a manually edited article. The changes are then shown in a diff-like view (highlighting additions and deletions between the current local article and the updated source article). 
