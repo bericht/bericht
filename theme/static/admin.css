@@ -2,6 +2,9 @@ body {
     overflow-y: scroll; /* hack to force vertical scrollbar on all pages */
 }
 
+.menu {
+    margin: 15px;
+}
 
 #article-list {
     padding: 0.5em 0;
@@ -23,8 +26,9 @@ body {
     background-color: rgb(245, 245, 245);  /* @TODO: use lesscss constant. */
     border: 1px solid rgb(231, 231, 231);
     border-bottom: none;
-
 }
+#sidebar-list li:last-child { border-bottom: 1px solid rgb(231, 231, 231); }
+
 #sidebar-list li.selected {
     background-color: white;
     border-right-color: white;
