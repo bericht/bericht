@@ -106,7 +106,22 @@ not a priority).
 
 Live Ticker
 -----------
-TODO
+
+A *Live Ticker* is a feature that should provide infrastructure to do live coverage of events. As such it provides means to add *updates* and show these in (reversed) chronological order with timestamps. 
+
+On the public front end, a live ticker is displayed on an mobile-optimized page that automatically loads new updates at top using JavaScript/AJAX. If a *Live Ticker* is finished, the representation is different in that the updates are shown in chonological order. 
+
+It is possible to put the *Live Ticker* on the front page (showing the latest k updates) and also show it as breaking, i.e. always on the top of the page on *Bericht*, unless the user decides to hide it (clicking on an 'x'). 
+
+On the back end, an interface is provided that is tailored to quick data entry, setting the time to the current time as default and providing autocomplete for the optional metadata of the updates (based on previous updates). It is also well usable from mobile devices. 
+
+A *Live Ticker* can be created by everyone with a certain trust level (either editors or trusted users) and the creator can add any users as contributors. This information is not shown publicly.
+
+A *Live Ticker* constists of the following content types:
+
+* **LiveTicker** provides a description of the event covered and optional information that is always visible at top as long as the ticker is active. It also holds information about who created the ticker and who is allowed to post updates. 
+* **Update** is an individual update and provides a timestamp, the update content and a field for optional additional data that can be used for location information.
+
 
 Bookmarks
 ---------
