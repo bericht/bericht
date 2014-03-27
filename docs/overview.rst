@@ -132,3 +132,14 @@ tags, better teaser, fixed content, etc.)
 * **FeedFile** stores the feed file and archives it, time-stamped
 * **Feed** stores the parsed feed
 * **FeedItem** holds individual feed items
+
+
+Artex: Article Extraction
+-------------------------
+
+*Artex* extracts articles from HTML pages. It is based on readability-lxml_ which itself is based on the readability library from arc90_. Because many news feeds provide only teasers, we decided to use article extraction for all news feed items. Article extraction is done when creating an *ImportedArticle* from a *FeedItem*: The linked website's HTML is fetched, stored and then *artex* is run on the HTML. 
+
+*Artex* wraps around the readability-lxml library and adds parameters that proved useful during our tests. First are additional 'negative' keywords that can are stored in ``settings.ARTEX_NEGATIVE_KEYWORDS`` and are used to identify non-article HTML elements. Another are the ``settings.ARTEX_METADATA_TERMS`` that are used to identify HTML elements at the start and end of an article that contain article metadata (or ads). 
+
+.. _readability-lxml: https://github.com/buriy/python-readability/
+.. _arc90: http://lab.arc90.com/2009/03/02/readability/
