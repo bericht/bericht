@@ -125,7 +125,15 @@ A *Live Ticker* constists of the following content types:
 
 Bookmarks
 ---------
-TODO
+
+*Bookmarks* provides the possibility for users to post links that they think are of interest to the community. 
+
+For every *Bookmark* it is required that the user states, with a comment, why this link is interesting. Users are encouraged to add tags to a Bookmark. Bookmarks are subject to voting and the link's HTML is fetched for archival purposes and article extraction is run on the HTML. This extracted article is not shown in full (mainly due to copyright issues), but used for search and the start of the article is used as a teaser. 
+
+The content type is thus as follows:
+
+* **Bookmark** holds the link, user comment, HTML, extracted article and metadata. 
+
 
 Content Handling
 ================
