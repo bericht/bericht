@@ -251,6 +251,8 @@ INSTALLED_APPS = (
     "mustachejs",
 
     "bericht.theme",
+    "bericht.voting",
+    "bericht.frontpage",
     "bericht.aggregator",
     "bericht.artex",
 
