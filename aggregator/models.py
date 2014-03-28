@@ -19,11 +19,13 @@ from django.core.urlresolvers import reverse
 
 from mezzanine.generic.fields import CommentsField
 
+from tasks import fetch_item_html
+
 logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
 parsed_item = Signal(providing_args=['entry'])
-
+saved_item = Signal(providing_args=['feeditem'])
 
 @receiver(fetched_feed_file)
 def parse_feed_file(sender, **kwargs):
@@ -196,6 +198,21 @@ class FeedItem(models.Model):
         return reverse('bericht.aggregator.views.article_detail',
                        args=[str(self.id)])
 
+    def fetch_html(self):
+        # @TODO: Ask if the html was actually modified (ETag, 304).
+        req = requests.get(self.link, headers={'user-agent': 'readability'},
+                           verify=False)
+
+        # requests.get handles redirection, so everything except 200 here
+        # should be an actual error.
+        if req.status_code != 200:
+            logger.error("error while fetching HTML of '%s': %s" %
+                         (self.link, req.status_code))
+            return
+
+        self.link_html = req.content
+        self.save()
+
     @classmethod
     def from_feed_entry(cls, feed, entry):
         item, new = cls.objects.get_or_create(
@@ -206,21 +223,6 @@ class FeedItem(models.Model):
             })
         item.tags.add(*cls._get_tags(entry))
         item.content = cls._get_item_content_as_text(entry)
-
-        # @TODO: Ask if the html was actually modified (ETag, 304).
-        # @TODO: Should probably be in it's own method/triggered by signal.
-        # fetching and storing the HTML of the linked web page
-        req = requests.get(item.link, headers={'user-agent': 'readability'},
-                           verify=False)
-
-        # requests.get handles redirection, so everything except 200 here
-        # should be an actual error.
-        if req.status_code != 200:
-            logger.error("error while fetching HTML of '%s': %s" %
-                         (item.link, req.status_code))
-            return
-
-        item.link_html = req.content
         item.save()
 
         status = "new" if new else "updated"
