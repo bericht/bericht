@@ -1,0 +1,20 @@
+---
+- name: restart nginx
+  service: name=nginx state=restarted
+  sudo_user: root
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+  sudo_user: root
+
+- name: restart supervisor
+  service: name=supervisor state=restarted
+  sudo_user: root
+
+- name: reload supervisor
+  service: name=supervisor state=reloaded
+  sudo_user: root
+
+- name: restart gunicorn
+  supervisorctl: name="bericht:gunicorn_{{project_name}}" state=restarted
+  sudo_user: root

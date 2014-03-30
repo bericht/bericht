@@ -1,0 +1,30 @@
+---
+host_name: bericht.dev
+project_name: bericht
+project_root: /home/bericht
+project_repo: https://github.com/bericht/bericht.git
+code_root: "{{project_root}}/code/{{project_name}}"
+
+branch: master
+database_password: database_password
+
+system_packages:
+  - build-essential
+  - git
+  - libevent-dev
+  - nginx
+  - postgresql
+  - postgresql-server-dev-all
+  - supervisor
+  - python-setuptools
+  - python-dev
+  - libffi-dev
+  - libxslt-dev
+  - libxml2-dev
+python_packages:
+  - pip
+  - virtualenv
+
+gunicorn_port: 8000
+secret_key: TEST1
+nevercache_key: TEST2

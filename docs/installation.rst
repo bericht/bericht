@@ -37,3 +37,14 @@ Run the development server::
   python manage.py runserver
 
 Have fun!
+
+
+Ansible
+-------
+
+We deploy our systems using `ansible <http://ansible.com>`_, the scripts are
+tested to run on debian stable and included in ``deploy/``. Change ``bericht.dev``
+in ``deploy/hosts`` to the IP or hostname of your debian server and run::
+
+  ansible-playbook -i deploy/hosts -K deploy/site.yml
+
