@@ -1,17 +1,10 @@
 import logging
 
 from django.db import models
-from django.db.models.signals import post_save 
 from django.dispatch import receiver
 from taggit.managers import TaggableManager
 
-from aggregator.models import FeedItem
-
 logger = logging.getLogger(__name__)
-
-@receiver(post_save, sender=FeedItem)
-def create_article(sender, instance, **kwargs):
-    ImportedArticle.from_feeditem(instance)
 
 class AbstractArticle(models.Model):
     """ This model holds content common to all types of Article. """
@@ -40,7 +33,7 @@ class ImportedArticle(AbstractArticle):
     additional data that is useful for this scenario.
     """
     #: The FeedItem this ImportedArticle was created from.
-    feeditem = models.OneToOneField(FeedItem)
+    feeditem = models.OneToOneField('aggregator.FeedItem')
     #: This holds the full HTML of the article linked to by the FeedItem.
     link_html = models.TextField(blank=True)
 

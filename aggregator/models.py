@@ -18,8 +18,7 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from mezzanine.generic.fields import CommentsField
-
-from tasks import fetch_item_html
+from article.models import ImportedArticle
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +30,13 @@ saved_feeditem = Signal()
 def parse_feed_file(sender, **kwargs):
     Feed.from_file(sender)
 
-
 @receiver(parsed_item)
 def save_item(sender, **kwargs):
     FeedItem.from_feed_entry(sender, kwargs['entry'])
 
+@receiver(saved_feeditem)
+def create_article(sender, **kwargs):
+    ImportedArticle.from_feeditem(sender)
 
 # @TODO Uses a blacklist by default, we might want to replace that with a
 # whitelist.
@@ -213,6 +214,7 @@ class FeedItem(models.Model):
         status = "new" if new else "updated"
         logger.info("parsed %s item: %s [from %s]" % (status, feed.link,
                                                       feed.feed_file.url))
+        saved_feeditem.send(sender=item)
 
     @classmethod
     def _get_date_of_update(cls, entry):
