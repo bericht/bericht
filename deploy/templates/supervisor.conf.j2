@@ -1,0 +1,10 @@
+[group:{{project_name}}]
+programs=gunicorn_{{project_name}}
+
+[program:gunicorn_{{project_name}}]
+command={{project_root}}/env/bin/gunicorn bericht.wsgi -c ../gunicorn.conf.py -p ../gunicorn.pid
+directory={{project_root}}/code/
+user={{project_name}}
+autostart=true
+autorestart=true
+redirect_stderr=true
