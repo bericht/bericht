@@ -1,6 +1,7 @@
 import logging
 
 from django.db import models
+from django.db.models.signals import post_save 
 from django.dispatch import receiver
 from taggit.managers import TaggableManager
 
@@ -8,6 +9,9 @@ from aggregator.models import FeedItem
 
 logger = logging.getLogger(__name__)
 
+@receiver(post_save, sender=FeedItem)
+def create_article(sender, instance, **kwargs):
+    ImportedArticle.from_feeditem(instance)
 
 class AbstractArticle(models.Model):
     """ This model holds content common to all types of Article. """
@@ -22,7 +26,7 @@ class AbstractArticle(models.Model):
     #: The content, or body, of the article.
     content = models.TextField(blank=True)
     #: The description/teaser for this article.
-    description = models.TextField()
+    teaser = models.TextField()
     #: Tags assigned to this article.
     tags = TaggableManager()
 
@@ -67,10 +71,12 @@ class ImportedArticle(AbstractArticle):
         article, new = cls.objects.get_or_create(
             feeditem=feeditem,
             title=feeditem.title,
-            description=feeditem.description)
-        article.tags.add(*feeditem.tags)
-        article.save()
+            created_at=feeditem.updated_at,
+            teaser=feeditem.description)
+        article.tags.add(*feeditem.tags.all())
+        if new:
+            article.save()
 
         status = "new" if new else "updated"
         logger.info("Created %s ImportedArticle: %s" % (status,
-                                                        article.title()))
+                                                        article.title))

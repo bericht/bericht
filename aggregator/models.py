@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
 parsed_item = Signal(providing_args=['entry'])
-saved_item = Signal(providing_args=['feeditem'])
+saved_feeditem = Signal()
 
 @receiver(fetched_feed_file)
 def parse_feed_file(sender, **kwargs):
@@ -197,21 +197,6 @@ class FeedItem(models.Model):
     def get_absolute_url(self):
         return reverse('bericht.aggregator.views.article_detail',
                        args=[str(self.id)])
-
-    def fetch_html(self):
-        # @TODO: Ask if the html was actually modified (ETag, 304).
-        req = requests.get(self.link, headers={'user-agent': 'readability'},
-                           verify=False)
-
-        # requests.get handles redirection, so everything except 200 here
-        # should be an actual error.
-        if req.status_code != 200:
-            logger.error("error while fetching HTML of '%s': %s" %
-                         (self.link, req.status_code))
-            return
-
-        self.link_html = req.content
-        self.save()
 
     @classmethod
     def from_feed_entry(cls, feed, entry):
