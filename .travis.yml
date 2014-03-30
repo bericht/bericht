@@ -9,7 +9,7 @@ install:
 
 before_script:
   - pwd
-  - cp ./deploy/travis_settings.py ./local_settings.py
+  - cp ./deploy/files/travis_settings.py ./local_settings.py
   - mkdir -p ~/bericht-data/media
   - mkdir -p ~/bericht-data/static
 
