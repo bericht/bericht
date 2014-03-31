@@ -223,3 +223,22 @@ get a notification if there is an update at the source for a manually edited
 article. The changes are then shown in a diff-like view (highlighting 
 additions and deletions between the current local article and the updated 
 source article). 
+
+
+Voting
+------
+
+We decided to use a customized fork of django_voting_, after we looked into
+a bunch of available solutions, because we need to record different types of
+votes - yes, no, veto and abstain - not just up- and downvotes which could be
+represented by integer values.
+
+A ``Vote`` is its own database object and has a one-to-one relationship to
+the ``Entry``, or theoretically any other object, voted upon. A custom model
+manager provides methods to record a vote, get a users vote and to get all
+votes on a given object.
+
+The decision what to do with those votes is up to the model on which the
+vote was casted, you can find an example in ``Entry.is_public``
+
+.. _django_voting: https://github.com/jezdez/django-voting
