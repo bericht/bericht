@@ -1,3 +1,4 @@
+from time import sleep
 from urlparse import urljoin
 
 from behave import given, when, then
@@ -19,6 +20,7 @@ def the_user_accesses_the_url(context, url):
 @when(u'the user clicks on the link "{label}"')
 def the_user_clicks_on_the_link(context, label):
     context.browser.find_link_by_partial_text(label)[0].click()
+    sleep(1)
 
 
 @then(u'she should see {expected:d} articles in the sidebar')
