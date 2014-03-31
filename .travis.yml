@@ -1,8 +1,15 @@
 language: python
+
 env:
 - DJANGO_VERSION=1.6.2 PYTHONPATH=$HOME/build/bericht
+
 python:
   - "2.7"
+
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
 install:
   - pip install -r requirements/project.txt
   - pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
@@ -16,9 +23,3 @@ before_script:
 script:
   - python manage.py test aggregator
   - python manage.py test aggregator --testrunner=utils.test_runner.AcceptanceTestSuiteRunner
-
-addons:
-  sauce_connect:
-    username: "bericht"
-    access_key:
-      secure: "SB8umrDINdDmuNrahxTyawR0kwbqVtMYvn/5VhMWKramuCUnOh3DRgR2F7qmizAZbC9ygKk9mv90XKXBBSbfvtwG0t+AuYEZpMgvdPQ/NVunUoC4fXalu799YhOQz/gnc8smje2vhfnI+xCG1sMKBJ84dz/M51/sIafVmaDxTMw="
