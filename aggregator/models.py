@@ -26,17 +26,21 @@ fetched_feed_file = Signal()
 parsed_item = Signal(providing_args=['entry'])
 saved_feeditem = Signal()
 
+
 @receiver(fetched_feed_file)
 def parse_feed_file(sender, **kwargs):
     Feed.from_file(sender)
+
 
 @receiver(parsed_item)
 def save_item(sender, **kwargs):
     FeedItem.from_feed_entry(sender, kwargs['entry'])
 
+
 @receiver(saved_feeditem)
 def create_article(sender, **kwargs):
     ImportedArticle.from_feeditem(sender)
+
 
 # @TODO Uses a blacklist by default, we might want to replace that with a
 # whitelist.
@@ -81,7 +85,7 @@ class FeedFile(models.Model):
         """
         logger.info("fetching feed at '%s'..." % self.url)
         try:
-            headers = {'user-agent': feedparser.USER_AGENT,}
+            headers = {'user-agent': feedparser.USER_AGENT, }
             # only set headers if they were set:
             if self.etag != '':
                 headers['If-None-Match'] = self.etag

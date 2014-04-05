@@ -1,10 +1,11 @@
 import logging
+import requests
 
 from django.db import models
-from django.dispatch import receiver
 from taggit.managers import TaggableManager
 
 logger = logging.getLogger(__name__)
+
 
 class AbstractArticle(models.Model):
     """ This model holds content common to all types of Article. """
