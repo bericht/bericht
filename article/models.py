@@ -4,10 +4,12 @@ import requests
 from django.db import models
 from taggit.managers import TaggableManager
 
+from bericht.frontpage.models import Entry
+
 logger = logging.getLogger(__name__)
 
 
-class AbstractArticle(models.Model):
+class AbstractArticle(Entry):
     """ This model holds content common to all types of Article. """
     #: Holds the datetime when this item was created.
     created_at = models.DateTimeField()
