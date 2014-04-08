@@ -4,7 +4,7 @@ import requests
 from django.db import models
 from taggit.managers import TaggableManager
 
-from bericht.frontpage.models import Entry
+from bericht.core.models import Entry
 
 logger = logging.getLogger(__name__)
 

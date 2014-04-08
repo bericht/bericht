@@ -15,7 +15,7 @@ urlpatterns = patterns(
     # admin interface, which would be marginally more secure.
     ("^admin/", include(admin.site.urls)),
 
-    url("^$", "bericht.frontpage.views.frontpage", name='home'),
+    url("^$", "bericht.core.views.frontpage", name='home'),
     url("^backend/articles$", "bericht.aggregator.views.article_list",
         name='backend-articles'),
     url("^api/articles$", ArticlesView.as_view(),

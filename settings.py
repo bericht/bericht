@@ -250,13 +250,12 @@ INSTALLED_APPS = (
     "rest_framework",
     "mustachejs",
 
+    "bericht.core",
     "bericht.theme",
     "bericht.voting",
-    "bericht.frontpage",
     "bericht.aggregator",
     "bericht.artex",
     "bericht.article",
-    "bericht.frontpage",
 
     "mezzanine.boot",
     "mezzanine.conf",
