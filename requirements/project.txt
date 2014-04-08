@@ -20,3 +20,4 @@ mock==1.0.1
 Pillow==2.1.0
 readability-lxml==0.3.0.2
 -e git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#egg=django-behave
+celery==3.1

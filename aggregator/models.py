@@ -18,11 +18,13 @@ from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
 
 from mezzanine.generic.fields import CommentsField
+from article.models import ImportedArticle
 
 logger = logging.getLogger(__name__)
 
 fetched_feed_file = Signal()
 parsed_item = Signal(providing_args=['entry'])
+saved_feeditem = Signal()
 
 
 @receiver(fetched_feed_file)
@@ -33,6 +35,11 @@ def parse_feed_file(sender, **kwargs):
 @receiver(parsed_item)
 def save_item(sender, **kwargs):
     FeedItem.from_feed_entry(sender, kwargs['entry'])
+
+
+@receiver(saved_feeditem)
+def create_article(sender, **kwargs):
+    ImportedArticle.from_feeditem(sender)
 
 
 # @TODO Uses a blacklist by default, we might want to replace that with a
@@ -78,7 +85,7 @@ class FeedFile(models.Model):
         """
         logger.info("fetching feed at '%s'..." % self.url)
         try:
-            headers = {'user-agent': feedparser.USER_AGENT,}
+            headers = {'user-agent': feedparser.USER_AGENT, }
             # only set headers if they were set:
             if self.etag != '':
                 headers['If-None-Match'] = self.etag
@@ -206,26 +213,12 @@ class FeedItem(models.Model):
             })
         item.tags.add(*cls._get_tags(entry))
         item.content = cls._get_item_content_as_text(entry)
-
-        # @TODO: Ask if the html was actually modified (ETag, 304).
-        # @TODO: Should probably be in it's own method/triggered by signal.
-        # fetching and storing the HTML of the linked web page
-        req = requests.get(item.link, headers={'user-agent': 'readability'},
-                           verify=False)
-
-        # requests.get handles redirection, so everything except 200 here
-        # should be an actual error.
-        if req.status_code != 200:
-            logger.error("error while fetching HTML of '%s': %s" %
-                         (item.link, req.status_code))
-            return
-
-        item.link_html = req.content
         item.save()
 
         status = "new" if new else "updated"
         logger.info("parsed %s item: %s [from %s]" % (status, feed.link,
                                                       feed.feed_file.url))
+        saved_feeditem.send(sender=item)
 
     @classmethod
     def _get_date_of_update(cls, entry):
