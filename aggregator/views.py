@@ -24,7 +24,8 @@ class ArticlesView(generics.ListCreateAPIView):
 
 
 def article_list(request):
-    return render(request, ['article_list.html'])
+    return render(request, ['article_list.html'],
+                  {'api_endpoint': '/api/articles'})
 
 
 # @TODO: Articles, not items

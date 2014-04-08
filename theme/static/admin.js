@@ -21,7 +21,7 @@ var Article = Backbone.Model.extend({
 });
 
 var ArticleList = Backbone.Collection.extend({
-    url: '/api/articles',
+    url: function() { return window.bericht.api_endpoint; },
     model: Article,
     page: 1,
 

@@ -20,6 +20,11 @@
     <script src="{% static "underscore.js" %}"></script>
     <script src="{% static "backbone.js" %}"></script>
     <script src="{% static "admin.js" %}"></script>
+
+    <script>
+      window.bericht = window.bericht || {};
+      window.bericht.api_endpoint = '{{ api_endpoint }}';
+    </script>
 {% endblock %}
 
 
