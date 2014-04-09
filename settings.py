@@ -250,7 +250,7 @@ INSTALLED_APPS = (
     "rest_framework",
     "mustachejs",
 
-    "bericht.core",
+    "bericht.entry",
     "bericht.theme",
     "bericht.voting",
     "bericht.aggregator",
