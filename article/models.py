@@ -9,7 +9,7 @@ from bericht.entry.models import Entry
 logger = logging.getLogger(__name__)
 
 
-class AbstractArticle(Entry):
+class Article(Entry):
     """ This model holds content common to all types of Article. """
     #: Holds the datetime when this item was created.
     created_at = models.DateTimeField()
@@ -26,11 +26,18 @@ class AbstractArticle(Entry):
     #: Tags assigned to this article.
     tags = TaggableManager()
 
-    class Meta:
-        abstract = True
+    def get_child_class_instance(self):
+        # @TODO: Check if there's a more elegant way ;)
+        try:
+            return self.importedarticle
+        except ImportedArticle.DoesNotExist:
+            # try:
+            #     return self.localarticle
+            # except LocalArticle.DoesNotExist:
+            return False
 
 
-class ImportedArticle(AbstractArticle):
+class ImportedArticle(Article):
     """
     This model is created from an aggregator.FeedItem and contains
     additional data that is useful for this scenario.
