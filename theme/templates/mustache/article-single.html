@@ -19,7 +19,10 @@
     </div>
     <div class="info pull-right">
       <span class="glyphicon glyphicon-time"></span> {{ article.updated_at }}
-      <span class="glyphicon glyphicon-globe"></span> {{ article.source }}
+        <span class="glyphicon glyphicon-globe"></span>
+        {{#article.source}}
+        <a href="{{url}}">{{title}}</a>
+        {{/article.source}}
     </div>
     <div class="tags">
       <span class="glyphicon glyphicon-tags"></span> {{#article.tags}}{{.}}, {{/article.tags}}{{^article.tags}}None{{/article.tags}}
