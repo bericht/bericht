@@ -2,7 +2,11 @@ import logging
 import requests
 
 from django.db import models
+from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
+
+from mezzanine.generic.fields import CommentsField
 
 from bericht.entry.models import Entry
 
@@ -25,6 +29,15 @@ class Article(Entry):
     teaser = models.TextField()
     #: Tags assigned to this article.
     tags = TaggableManager()
+    #: Comments of this article.
+    comments = CommentsField()
+
+    def slug(self):
+        return "%d-%s" % (self.id, slugify(self.title))
+
+    def get_absolute_url(self):
+        return reverse('bericht.article.views.article_detail',
+                       args=[str(self.id)])
 
     def get_child_class_instance(self):
         # @TODO: Check if there's a more elegant way ;)
@@ -76,6 +89,7 @@ class ImportedArticle(Article):
             title=feeditem.title,
             created_at=feeditem.updated_at,
             teaser=feeditem.description)
+        # @TODO Check if this works, looks like it does not.
         article.tags.add(*feeditem.tags.all())
         if new:
             article.save()
