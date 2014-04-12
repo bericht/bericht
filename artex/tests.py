@@ -5,6 +5,7 @@ Tests for the Article Extractor artex.
 """
 import os
 import unittest
+import urllib
 
 from django.test import TestCase
 from django.conf import settings
@@ -85,3 +86,34 @@ class ArticleTest(TestCase):
         self.assertEqual('<p>This is the main text to be extracted.</p>',
                          article.content)
         self.assertEqual(title, article.title)
+
+    def test_elem_without_text(self):
+        """
+        There was a bug that tried to strip from a None object because there
+        was no text attribute to the last element in the html tree, as in this
+        example. This test checks for that.
+        """
+        html = """
+        <div><div class="articletext">
+        <img src="http://www.example.com/image.png" alt="image alt text"/>
+        <div class="abstract"><p>The abstract goes here.</p></div>
+        <p> </p>
+        <p><b>Some bold text.</b><br/>&#13;
+        <br/>&#13;
+        This here is a part of the text to be extracted. It is a bit longer
+        than the other lines and parts.<br/>&#13;
+        <br/>&#13;
+        Just some text.<br/>&#13;
+        <br/>&#13;
+        Text <a href="http://www.example.com" title="external link" \
+        target="_blank" class="nosymbol">http://www.example.com</a></p>
+        </div>
+        </div>
+        """
+        artex.cleanup(etree.fromstring(html))
+        start = '<img src="'
+        end = 'om</a></p>'
+        self.assertEqual(artex.elem_content_to_string(
+            artex.cleanup(etree.fromstring(html)))[:10], start)
+        self.assertEqual(artex.elem_content_to_string(
+            artex.cleanup(etree.fromstring(html)))[-10:], end)

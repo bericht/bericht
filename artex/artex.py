@@ -57,11 +57,11 @@ def cleanup(root, title=None):
     # post metadata
     while len(list(root)) > 1:
         last_elem = root[len(list(root))-1]
-        if last_elem.text.strip() == '':
-            root.remove(elem_attr)
+        if not contains_text(last_elem):
+            root.remove(last_elem)
             continue
         if elem_attr_contain(last_elem, settings.ARTEX_METADATA_TERMS):
-            root.remove(elem_attr)
+            root.remove(last_elem)
         else:
             break
     return root
@@ -127,4 +127,3 @@ class Article():
             # clean up the article html:
             clean_html = cleanup(html_tree, self.title)
         self.content = elem_content_to_string(clean_html)
-        #self.content = doc.summary(html_partial=True)
