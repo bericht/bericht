@@ -5,7 +5,6 @@ Tests for the Article Extractor artex.
 """
 import os
 import unittest
-import urllib
 
 from django.test import TestCase
 from django.conf import settings
