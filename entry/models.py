@@ -2,7 +2,6 @@ from django.db import models
 from ..voting.models import Vote
 
 
-# TODO: Abstract?
 class Entry(models.Model):
     def is_public(self):
         votes = Vote.objects.get_votes(self)
@@ -10,6 +9,3 @@ class Entry(models.Model):
             return True
         else:
             return False
-
-    class Meta:
-        abstract = True
