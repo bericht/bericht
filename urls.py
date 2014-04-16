@@ -2,6 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from article.views import ArticlesView
+from entry.views import VotesView
 
 admin.autodiscover()
 
@@ -23,6 +24,8 @@ urlpatterns = patterns(
         name='backend-articles'),
     url(r'(?P<article_id>\d+)/$', "bericht.article.views.article_detail",
         name='article-detail'),
+    url("^api/votes/(?P<entry_id>\d+)(?:/(?P<vote>yes|no|veto|abstain))?/$",
+        VotesView.as_view(), name='votes-view'),
 
 
     # MEZZANINE'S URLS

@@ -14,8 +14,6 @@ class ArticleFilter(FilterSet):
 
 
 # @TODO: authentification/permissions
-# @TODO: extra app for administrative views?
-# @TODO: Articles, not FeedItems
 class ArticlesView(generics.ListCreateAPIView):
     queryset = Article.objects.order_by('-updated_at')
     serializer_class = ArticleSerializer

@@ -13,7 +13,10 @@ class VoteManager(models.Manager):
             object_id=obj._get_pk_val(),
             content_type=ctype
         ).values('vote').annotate(number=Count('vote'))
-        return {i['vote']: i['number'] for i in result}
+
+        defaults = {i: 0 for i in self.model.VOTE_IDS}
+        return dict(defaults.items() +
+                    {i['vote']: i['number'] for i in result}.items())
 
     def record_vote(self, obj, user, vote):
         """
@@ -21,6 +24,7 @@ class VoteManager(models.Manager):
         to vote once, though that vote may be changed.
         """
         ctype = ContentType.objects.get_for_model(obj)
+        vote = vote.upper()
 
         if vote not in self.model.VOTE_IDS:
             raise ValueError('Invalid vote (must be one of %s).' %
@@ -49,7 +53,7 @@ class VoteManager(models.Manager):
         ctype = ContentType.objects.get_for_model(obj)
         try:
             vote = self.get(content_type=ctype, object_id=obj._get_pk_val(),
-                            user=user)
+                            user=user).vote
         except models.ObjectDoesNotExist:
             vote = None
         return vote

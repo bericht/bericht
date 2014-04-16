@@ -39,6 +39,7 @@ class Article(Entry):
         return reverse('bericht.article.views.article_detail',
                        args=[str(self.id)])
 
+
 class ImportedArticle(Article):
     """
     This model is created from an aggregator.FeedItem and contains
