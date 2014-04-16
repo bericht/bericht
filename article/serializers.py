@@ -13,9 +13,8 @@ class ArticleSerializer(serializers.ModelSerializer):
                   'source')
 
     def get_source_info(self, obj):
-        article = obj.get_child_class_instance()
-        if isinstance(article, ImportedArticle):
-            return {'title': article.feeditem.feed.title,
-                    'url': article.feeditem.link}
+        if isinstance(obj, ImportedArticle):
+            return {'title': obj.feeditem.feed.title,
+                    'url': obj.feeditem.link}
         else:
             return None

@@ -1,8 +1,8 @@
-from django.db import models
+from polymorphic import PolymorphicModel
 from ..voting.models import Vote
 
 
-class Entry(models.Model):
+class Entry(PolymorphicModel):
     def is_public(self):
         votes = Vote.objects.get_votes(self)
         if votes['NO'] < 10 and votes['VETO'] < 1 and votes['YES'] >= 10:

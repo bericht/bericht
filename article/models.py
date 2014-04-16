@@ -39,17 +39,6 @@ class Article(Entry):
         return reverse('bericht.article.views.article_detail',
                        args=[str(self.id)])
 
-    def get_child_class_instance(self):
-        # @TODO: Check if there's a more elegant way ;)
-        try:
-            return self.importedarticle
-        except ImportedArticle.DoesNotExist:
-            # try:
-            #     return self.localarticle
-            # except LocalArticle.DoesNotExist:
-            return False
-
-
 class ImportedArticle(Article):
     """
     This model is created from an aggregator.FeedItem and contains
