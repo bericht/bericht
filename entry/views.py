@@ -32,10 +32,7 @@ class VotesView(APIView):
             return HttpResponseForbidden()
 
         entry = self.get_entry(entry_id)
-        if vote == 'veto':
-            pass  # @TODO: Implement Veto in our django-voting fork.
-        elif vote:
-            Vote.objects.record_vote(entry, request.user, vote)
+        Vote.objects.record_vote(entry, request.user, vote)
 
         return self.get(request, entry_id, format=format)
 
