@@ -1,17 +1,6 @@
 
 $(document).ready(function() {
-    Handlebars.registerHelper('vote-icon', function(vote) {
-        return new Handlebars.SafeString({
-            'YES':  'glyphicon-thumbs-up',
-            'NO':   'glyphicon-thumbs-down',
-            'VETO': 'glyphicon-remove',
-        }[vote]);
-    });
-
-    Handlebars.registerHelper('capitalize', function(vote) {
-        return new Handlebars.SafeString(
-            vote.charAt(0).toUpperCase() + vote.slice(1).toLowerCase());
-    });
+    register_handlebar_helpers();
 
     var articles, keys;
     window.bericht = window.bericht || {};
@@ -159,8 +148,33 @@ var ArticleView = Backbone.View.extend({
 
 var VoteView = Backbone.View.extend({
     render: function() {
-        console.log(this.model.attributes.votes);
         $('#content article .votes').html(render_template(
             'voting-bar', {article: this.model.attributes}));
     },
 });
+
+var register_handlebar_helpers = function() {
+    Handlebars.registerHelper('vote-icon', function(vote) {
+        return new Handlebars.SafeString({
+            'YES':  'glyphicon-thumbs-up',
+            'NO':   'glyphicon-thumbs-down',
+            'VETO': 'glyphicon-remove',
+        }[vote]);
+    });
+
+    Handlebars.registerHelper('user-vote', function(vote, user_vote) {
+        if (vote === user_vote) {
+            return new Handlebars.SafeString({
+            'YES':  'btn-success',
+            'NO':   'btn-warning',
+            'VETO': 'btn-danger',
+                
+            }[vote]);
+        }
+    });
+
+    Handlebars.registerHelper('capitalize', function(vote) {
+        return new Handlebars.SafeString(
+            vote.charAt(0).toUpperCase() + vote.slice(1).toLowerCase());
+    });
+};

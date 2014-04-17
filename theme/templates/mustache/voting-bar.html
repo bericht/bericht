@@ -1,6 +1,6 @@
 <div class="actions btn-group btn-group-sm">
 {{#each article.votes}}
-<button type="button" class="btn btn-default">
+<button type="button" class="btn btn-default {{user-vote @key ../article.user_vote}}">
   <span class="glyphicon {{vote-icon @key}}"></span>
   <span class="count">{{ this }}</span> {{capitalize @key }}
 </button>
