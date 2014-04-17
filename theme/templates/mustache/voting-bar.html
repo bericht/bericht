@@ -6,4 +6,8 @@
 </button>
 {{/each}}
 </div>
+{{#if article.is_public}}
 <span class="label label-success">public</span>
+{{else}}
+<span class="label label-default">hidden</span>
+{{/if}}
