@@ -1,10 +1,19 @@
-// @TODO Set djangos anti-cross-site-request-forgery-token.
-//var token = $('meta[name="csrf-token"]').attr('content');
-//xhr.setRequestHeader('X-CSRFToken', token);
 
 $(document).ready(function() {
-    var articles, keys;
+    Handlebars.registerHelper('vote-icon', function(vote) {
+        return new Handlebars.SafeString({
+            'YES':  'glyphicon-thumbs-up',
+            'NO':   'glyphicon-thumbs-down',
+            'VETO': 'glyphicon-remove',
+        }[vote]);
+    });
 
+    Handlebars.registerHelper('capitalize', function(vote) {
+        return new Handlebars.SafeString(
+            vote.charAt(0).toUpperCase() + vote.slice(1).toLowerCase());
+    });
+
+    var articles, keys;
     window.bericht = window.bericht || {};
     window.bericht.articles = articles = new ArticleList();
     new ArticleListView({collection: articles});
@@ -97,22 +106,6 @@ var ArticleSidebarView = Backbone.View.extend({
     },
 });
 
-var ArticleView = Backbone.View.extend({
-    initialize: function() {
-        this.render();
-        this.model.on('change:selected', this.render, this);
-        this.model.on('remove', _.bind(function(model, collection, options) {
-            this.remove();
-        }, this));
-    },
-
-    render: function() {
-        $('#content').html(render_template(
-            'article-single', {article: this.model.attributes}));
-        return this;
-    },
-});
-
 var ArticleListView = Backbone.View.extend({
     el: "#sidebar-list",
 
@@ -145,4 +138,29 @@ var ArticleListView = Backbone.View.extend({
     },
 });
 
+var ArticleView = Backbone.View.extend({
+    initialize: function() {
+        this.voting_bar = new VoteView({model: this.model});
+        this.render();
+        this.model.on('change:selected', this.render, this);
+        this.model.on('remove', _.bind(function(model, collection, options) {
+            this.voting_bar.remove();
+            this.remove();
+        }, this));
+    },
 
+    render: function() {
+        $('#content').html(render_template(
+            'article-single', {article: this.model.attributes}));
+        this.voting_bar.render();
+        return this;
+    },
+});
+
+var VoteView = Backbone.View.extend({
+    render: function() {
+        console.log(this.model.attributes.votes);
+        $('#content article .votes').html(render_template(
+            'voting-bar', {article: this.model.attributes}));
+    },
+});

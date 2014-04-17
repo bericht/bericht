@@ -6,19 +6,8 @@
     {{{ article.content }}}
   </div>
   <div class="meta">
-    <div class="actions btn-group btn-group-sm">
-      <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-thumbs-up"></span><span class="votes">{{ article.votes.YES }}</span> Good
-      </button>    
-      <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-thumbs-down"></span><span class="votes">{{ article.votes.NO }}</span> Bad
-      </button>    
-      <button type="button" class="btn btn-default">
-        <span class="glyphicon glyphicon-remove"></span><span class="votes">{{ article.votes.VETO }}</span> Veto
-      </button>
-    </div>
+    <div class="votes"></div>
     <div class="info pull-right">
-      <span class="label label-success">public</span>
       <span class="glyphicon glyphicon-time"></span> {{ article.updated_at }}
         <span class="glyphicon glyphicon-globe"></span>
         {{#article.source}}

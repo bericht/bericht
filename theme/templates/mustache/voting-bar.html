@@ -1,0 +1,9 @@
+<div class="actions btn-group btn-group-sm">
+{{#each article.votes}}
+<button type="button" class="btn btn-default">
+  <span class="glyphicon {{vote-icon @key}}"></span>
+  <span class="count">{{ this }}</span> {{capitalize @key }}
+</button>
+{{/each}}
+</div>
+<span class="label label-success">public</span>
