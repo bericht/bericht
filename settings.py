@@ -42,7 +42,7 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
 TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "theme/templates"),)
-MUSTACHEJS_DIRS = [os.path.join(d, 'mustache') for d in TEMPLATE_DIRS]
+JSTEMPLATE_DIRS = [os.path.join(d, 'mustache') for d in TEMPLATE_DIRS]
 
 ####################
 # BERICHT SETTINGS #
@@ -249,7 +249,7 @@ INSTALLED_APPS = (
     "django_behave",
     "taggit",
     "rest_framework",
-    "mustachejs",
+    "jstemplate",
 
     "bericht.entry",
     "bericht.theme",
