@@ -11,7 +11,7 @@ $(document).ready(function() {
 });
 
 var render_template = function (name, context) {
-    return Mustache.render(Mustache.TEMPLATES[name], context);
+    return Handlebars.templates[name](context);
 };
 
 var Article = Backbone.Model.extend({

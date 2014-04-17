@@ -16,7 +16,7 @@
 
 {% block extra_js %}
     <script src="{% static "jquery.hotkeys.js" %}"></script>
-    <script src="{% static "mustache.js" %}"></script>
+    <script src="{% static "handlebars.js" %}"></script>
     <script src="{% static "underscore.js" %}"></script>
     <script src="{% static "backbone.js" %}"></script>
     <script src="{% static "django_csrf.js" %}"></script>
@@ -56,5 +56,6 @@ Articles
 {% endblock %}
 
 {% block templates %}
-{% mustachejs "article-single" %}
+{% handlebarsjs "article-single" precompile %}
+{% handlebarsjs "voting-bar" precompile %}
 {% endblock %}
