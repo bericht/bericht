@@ -19,8 +19,12 @@ class VotesView(APIView):
 
     def get(self, request, entry_id, vote=None, format=None):
         entry = self.get_entry(entry_id)
-        votes = Vote.objects.get_votes(entry)
-        return HttpResponse(JSONRenderer().render(votes),
+        response = {
+            'votes': Vote.objects.get_votes(entry),
+            'user_vote': Vote.objects.get_for_user(entry, request.user),
+            'is_public': entry.is_public()
+        }
+        return HttpResponse(JSONRenderer().render(response),
                             {'content_type': 'application/json'})
 
     def post(self, request, entry_id, vote=None, format=None):

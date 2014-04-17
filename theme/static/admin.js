@@ -141,15 +141,30 @@ var ArticleView = Backbone.View.extend({
     render: function() {
         $('#content').html(render_template(
             'article-single', {article: this.model.attributes}));
-        this.voting_bar.render();
+        $('#content article .meta').prepend(this.voting_bar.render().el);
+        this.voting_bar.delegateEvents();
         return this;
     },
 });
 
 var VoteView = Backbone.View.extend({
+    className: "voting",
+    events: { 'click button': 'vote' },
+
     render: function() {
-        $('#content article .votes').html(render_template(
+        this.$el.html(render_template(
             'voting-bar', {article: this.model.attributes}));
+        return this;
+    },
+
+    vote: function(event) {
+        var self = this;
+        var vote = $(event.target).children('.name').text().toLowerCase();
+        $.post('/api/votes/' + this.model.attributes.id + '/' + vote + '/',
+               function(data) {
+                   self.model.set(data);
+                   self.render();
+               });
     },
 });
 
