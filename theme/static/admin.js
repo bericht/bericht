@@ -68,6 +68,15 @@ var ArticleList = Backbone.Collection.extend({
     parse: function(response) {
         this.prev_url = response.previous;
         this.next_url = response.next;
+
+        if (response.count === 0) {
+            $(ArticleView.prototype.el).html(
+                '<div class="alert alert-info">' +
+                    'Found no articles which matched the criteria.' +
+                    '</div>');
+            return;
+        }
+
         return response.results;
     },
 });
@@ -117,7 +126,11 @@ var ArticleListView = Backbone.View.extend({
 
     addAll: function() {
         this.collection.each(this.addOne, this);
-        this.collection.select(this.collection.at(0));
+
+        var first = this.collection.at(0);
+        if (first !== undefined) {
+            this.collection.select(first);
+        }
     },
 
     addOne: function(article) {
@@ -128,6 +141,8 @@ var ArticleListView = Backbone.View.extend({
 });
 
 var ArticleView = Backbone.View.extend({
+    el: "#content",
+
     initialize: function() {
         this.voting_bar = new VoteView({model: this.model});
         this.render();
@@ -139,9 +154,9 @@ var ArticleView = Backbone.View.extend({
     },
 
     render: function() {
-        $('#content').html(render_template(
+        this.$el.html(render_template(
             'article-single', {article: this.model.attributes}));
-        $('#content article .meta').prepend(this.voting_bar.render().el);
+        this.$el.find('article .meta').prepend(this.voting_bar.render().el);
         this.voting_bar.delegateEvents();
         return this;
     },
