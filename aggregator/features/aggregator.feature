@@ -13,14 +13,14 @@ Scenario: Browse new articles
       | Rename the Nobel for Economics |       10 |
 
     When the user clicks on the link "Older"
-    Then they should see an article with the following attributes
-      | title                                               |
-      | Kickstarting Improved PostgreSQL support for Django |
     Then they should see 10 articles in the sidebar, for example
       | title                                 | position |
       | DjangoCon Europe 2014 Call For Papers |        1 |
       | Announcing DjangoCon AU 2014          |       10 |
-
+    When the user clicks on the link "Kickstarting Improved PostgreSQL support for Django"
+    Then they should see an article with the following attributes
+      | title                                               | source            | public |
+      | Kickstarting Improved PostgreSQL support for Django | The Django weblog | hidden |
 
 Scenario: Browse explicitly hidden articles
     When the user accesses the url "/backend/articles/hidden/"

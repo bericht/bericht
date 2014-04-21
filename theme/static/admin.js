@@ -76,7 +76,6 @@ var ArticleList = Backbone.Collection.extend({
                     '</div>');
             return;
         }
-
         return response.results;
     },
 });
@@ -95,7 +94,7 @@ var ArticleSidebarView = Backbone.View.extend({
     render: function() {
         this.$el.attr('id', 'sidebar-' + this.model.get('slug'))
             .toggleClass('selected', this.model.get('selected'))
-            .html(this.model.get('title'));
+            .html('<a href="#">' + this.model.get('title') + '</a>');
         return this;
     },
 
@@ -145,12 +144,8 @@ var ArticleView = Backbone.View.extend({
 
     initialize: function() {
         this.voting_bar = new VoteView({model: this.model});
-        this.render();
         this.model.on('change:selected', this.render, this);
-        this.model.on('remove', _.bind(function(model, collection, options) {
-            this.voting_bar.remove();
-            this.remove();
-        }, this));
+
     },
 
     render: function() {
@@ -195,10 +190,9 @@ var register_handlebar_helpers = function() {
     Handlebars.registerHelper('user-vote', function(vote, user_vote) {
         if (vote === user_vote) {
             return new Handlebars.SafeString({
-            'YES':  'btn-success',
-            'NO':   'btn-warning',
-            'VETO': 'btn-danger',
-                
+                'YES':  'btn-success',
+                'NO':   'btn-warning',
+                'VETO': 'btn-danger',
             }[vote]);
         }
     });

@@ -49,7 +49,6 @@ def they_should_see_an_article(context):
         for key, value in zip(row.headings, row.cells):
             if key in attributes:
                 el = context.browser.find_by_css(attributes[key])[0]
-                print(key, el)
                 assertEqual(el.text, value)
 
 
