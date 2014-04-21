@@ -23,9 +23,9 @@ def the_user_clicks_on_the_link(context, label):
     sleep(1)
 
 
-@then(u'she should see {expected:d} articles in the sidebar')
-@then(u'she should see {expected:d} articles in the sidebar, for example')
-def she_should_see_articles(context, expected):
+@then(u'they should see {expected:d} articles in the sidebar')
+@then(u'they should see {expected:d} articles in the sidebar, for example')
+def they_should_see_articles(context, expected):
     found = len(context.browser.find_by_css('#sidebar-list li'))
     assertEqual(found, int(expected), 'expected %r articles, found %r'
                 % (int(expected), found))
