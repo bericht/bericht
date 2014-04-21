@@ -24,16 +24,16 @@ def the_user_clicks_on_the_link(context, label):
 
 
 @then(u'she should see {expected:d} articles in the sidebar')
+@then(u'she should see {expected:d} articles in the sidebar, for example')
 def she_should_see_articles(context, expected):
     found = len(context.browser.find_by_css('#sidebar-list li'))
     assertEqual(found, int(expected), 'expected %r articles, found %r'
                 % (int(expected), found))
-
-
-@then(u'the {number:d}. article should have the title "{title}"')
-def the_article_should_have_the_title(context, number, title):
-    entry = context.browser.find_by_css('#sidebar-list li')[number-1]
-    assertEqual(entry.text, title)
+    if context.table:
+        for row in context.table:
+            position = int(row['position']) - 1
+            entry = context.browser.find_by_css('#sidebar-list li')[position]
+            assertEqual(entry.text, row['title'])
 
 
 def assertEqual(first, second, msg=None):
