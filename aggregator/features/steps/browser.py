@@ -36,5 +36,22 @@ def they_should_see_articles(context, expected):
             assertEqual(entry.text, row['title'])
 
 
+@then(u'they should see an article with the following attributes')
+def they_should_see_an_article(context):
+    attributes = {
+        'title':    'article h2',
+        'source':   'article .meta .source',
+        'updated':  'article .meta .updated',
+        'public':   'article .meta .public',
+        'tags':     'article .meta .tags',
+    }
+    for row in context.table:
+        for key, value in zip(row.headings, row.cells):
+            if key in attributes:
+                el = context.browser.find_by_css(attributes[key])[0]
+                print(key, el)
+                assertEqual(el.text, value)
+
+
 def assertEqual(first, second, msg=None):
     assert first == second, msg or "%r != %r" % (first, second)

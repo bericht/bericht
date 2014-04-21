@@ -7,10 +7,11 @@
   </div>
   <div class="meta">
     <div class="info pull-right">
-      <span class="glyphicon glyphicon-time"></span> {{ article.updated_at }}
+      <span class="glyphicon glyphicon-time"></span>
+      <time class="updated">{{ article.updated_at }}</time>
         <span class="glyphicon glyphicon-globe"></span>
         {{#article.source}}
-        <a href="{{url}}">{{title}}</a>
+        <a class="source" href="{{url}}">{{title}}</a>
         {{/article.source}}
     </div>
     <div class="tags">
