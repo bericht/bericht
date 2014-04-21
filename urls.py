@@ -18,15 +18,20 @@ urlpatterns = patterns(
 
     url("^$", "bericht.entry.views.frontpage", name='home'),
 
-    url("^api/articles$", ArticlesView.as_view(),
-        name='articles-view'),
-    url("^backend/articles$", "bericht.article.views.article_list",
+    url("^api/articles/$", ArticlesView.as_view(), name='articles-view'),
+
+    url("^backend/articles/$", "bericht.article.views.article_list",
         name='backend-articles'),
-    url(r'(?P<article_id>\d+)/$', "bericht.article.views.article_detail",
-        name='article-detail'),
+    url("^backend/articles/hidden/$", "bericht.article.views.article_list",
+        {'public': 'f'}, name='backend-articles-hidden'),
+    url("^backend/articles/public/$", "bericht.article.views.article_list",
+        {'public': 't'}, name='backend-articles-public'),
+
     url("^api/votes/(?P<entry_id>\d+)(?:/(?P<vote>yes|no|veto|abstain))?/$",
         VotesView.as_view(), name='votes-view'),
 
+    url(r'(?P<article_id>\d+)/$', "bericht.article.views.article_detail",
+        name='article-detail'),
 
     # MEZZANINE'S URLS
     # ----------------

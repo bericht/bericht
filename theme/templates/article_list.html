@@ -24,7 +24,7 @@
 
     <script>
       window.bericht = window.bericht || {};
-      window.bericht.api_endpoint = '{{ api_endpoint }}';
+      window.bericht.api_endpoint = '{{ api_endpoint|safe }}';
     </script>
 {% endblock %}
 
@@ -36,9 +36,9 @@ Articles
 {% block custom_layout %}
     <div class="row">
       <ul class="menu nav nav-tabs">
-        <li class="active"><a href="#">New</a></li>
-        <li><a href="#">Downvoted</a></li>
-        <li><a href="#">Published</a></li>
+        <li class="active"><a href="{% url 'backend-articles' %}">New</a></li>
+        <li><a href="{% url 'backend-articles-hidden' %}">Hidden</a></li>
+        <li><a href="{% url 'backend-articles-public' %}">Public</a></li>
       </ul>
     </div>
     <div class="row">

@@ -1,7 +1,9 @@
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+
 from rest_framework import generics
 from mezzanine.utils.views import render
 from django_filters import FilterSet
-from django.shortcuts import get_object_or_404
 
 from .models import Article
 from .serializers import ArticleSerializer
@@ -15,18 +17,33 @@ class ArticleFilter(FilterSet):
 
 # @TODO: authentification/permissions
 class ArticlesView(generics.ListCreateAPIView):
-    queryset = Article.objects.order_by('-updated_at')
     serializer_class = ArticleSerializer
     filter_class = ArticleFilter
     paginate_by = 10
 
+    def get_queryset(self):
+        queryset = Article.objects.order_by('-updated_at')
 
-def article_list(request):
+        public = self.request.QUERY_PARAMS.get('public', None)
+        if public == 't':
+            return queryset.filter(public=True)
+        elif public == 'f':
+            return queryset.filter(public=False)
+        return queryset
+
+
+def article_list(request, public=None):
+    api_endpoint = '/api/articles/?'
+    if public:
+        api_endpoint += "public=%s&" % public
+
     return render(request, ['article_list.html'],
-                  {'api_endpoint': '/api/articles'})
+                  {'api_endpoint': api_endpoint})
 
 
-# @TODO: Articles, not items
 def article_detail(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
+    if not article.public:
+        return Http404()
+
     return render(request, ['article_detail.html'], {'article': article})
