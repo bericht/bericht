@@ -5,8 +5,8 @@ Scenario: Browse new articles
   Given we have some test data loaded from "articles.json"
     When the user accesses the url "/backend/articles/"
     Then they should see an article with the following attributes
-      | title                   | source                                  | updated                  | public | tags |
-      | A short history of spam | Le Monde diplomatique - English edition | 2014-04-18T08:59:28.814Z | hidden | None |
+      | title                   | source                                  | updated    | public | tags |
+      | A short history of spam | Le Monde diplomatique - English edition | 04/18/2014 | hidden | None |
     Then they should see 10 articles in the sidebar, for example
       | title                          | position |
       | A short history of spam        |        1 |

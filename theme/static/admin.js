@@ -158,6 +158,7 @@ var ArticleView = Backbone.View.extend({
 });
 
 var VoteView = Backbone.View.extend({
+    tagName: "span",
     className: "voting",
     events: { 'click button': 'vote' },
 
@@ -200,5 +201,10 @@ var register_handlebar_helpers = function() {
     Handlebars.registerHelper('capitalize', function(vote) {
         return new Handlebars.SafeString(
             vote.charAt(0).toUpperCase() + vote.slice(1).toLowerCase());
+    });
+
+    Handlebars.registerHelper('formatDate', function(date) {
+        return new Handlebars.SafeString(
+            (new Date(Date.parse(date))).toLocaleDateString());
     });
 };
