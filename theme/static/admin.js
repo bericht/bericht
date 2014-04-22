@@ -69,6 +69,9 @@ var ArticleList = Backbone.Collection.extend({
         this.prev_url = response.previous;
         this.next_url = response.next;
 
+        $('.previous').toggleClass('hidden', this.prev_url === null);
+        $('.next').toggleClass('hidden', this.next_url === null);
+
         if (response.count === 0) {
             $(ArticleView.prototype.el).html(
                 '<div class="alert alert-info">' +
