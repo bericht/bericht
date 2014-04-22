@@ -12,7 +12,6 @@ before_install:
 
 install:
   - pip install -r requirements/project.txt
-  - pip install git+git://github.com/dgreisen-cfpb/django-behave.git@my_fixes#django-behave 
 
 before_script:
   - pwd
