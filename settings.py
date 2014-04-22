@@ -257,6 +257,7 @@ INSTALLED_APPS = (
     "bericht.aggregator",
     "bericht.artex",
     "bericht.article",
+    "bericht.utils",
 
     "mezzanine.boot",
     "mezzanine.conf",
