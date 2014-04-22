@@ -42,6 +42,8 @@ class VoteManager(models.Manager):
                 return
             self.create(user=user, content_type=ctype,
                         object_id=obj._get_pk_val(), vote=vote)
+        finally:
+            obj.save()
 
     def get_for_user(self, obj, user):
         """
