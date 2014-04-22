@@ -44,6 +44,6 @@ def article_list(request, public=None):
 def article_detail(request, article_id):
     article = get_object_or_404(Article, pk=article_id)
     if not article.public:
-        return Http404()
+        raise Http404
 
     return render(request, ['article_detail.html'], {'article': article})
