@@ -39,7 +39,7 @@ class VotesView(APIView):
 
 def frontpage(request):
     # @TODO: Use weight and featured fields, which need to be implemented.
-    articles = Article.objects.order_by('-updated_at')[:5]
+    articles = Article.objects.filter(public=True).order_by('-updated_at')[:5]
     articles = paginate(articles, request.GET.get("page", 1),
                         settings.BLOG_POST_PER_PAGE,
                         settings.MAX_PAGING_LINKS)
