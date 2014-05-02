@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
+
+function run_manage_command() {
+    echo "Executing $1..."
+    python "$OPENSHIFT_REPO_DIR"/manage.py $1 --noinput
+
+}
+
+run_manage_command syncdb
+run_manage_command migrate
+run_manage_command collectstatic
+
