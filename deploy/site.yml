@@ -70,7 +70,7 @@
 
 
   - name: Upgrade the virtualenv.
-    pip: requirements={{code_root}}/requirements/project.txt virtualenv={{project_root}}/env/
+    pip: requirements={{code_root}}/requirements.txt virtualenv={{project_root}}/env/
     sudo_user: "{{project_name}}"
 
   - name: Add production dependencies.

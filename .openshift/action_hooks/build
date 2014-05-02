@@ -1,5 +1,0 @@
-#!/bin/bash
-
-source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
-
-pip install -r $OPENSHIFT_REPO_DIR/requirements/project.txt

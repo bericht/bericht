@@ -15,7 +15,7 @@ systems the following should  be sufficient:::
 
 Install the requirements::
 
-  pip install -r requirements/project.txt
+  pip install -r requirements.txt
 
 Create a ``local_settings.py`` file::
 
