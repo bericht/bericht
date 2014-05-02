@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Article, ImportedArticle
-from bericht.voting.models import Vote
+from ..voting.models import Vote
 
 
 class ArticleSerializer(serializers.ModelSerializer):

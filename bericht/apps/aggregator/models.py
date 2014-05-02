@@ -16,7 +16,7 @@ from django.dispatch import Signal, receiver
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.template.defaultfilters import slugify
 
-from article.models import ImportedArticle
+from ..article.models import ImportedArticle
 
 logger = logging.getLogger(__name__)
 

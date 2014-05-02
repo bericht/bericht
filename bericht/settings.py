@@ -5,7 +5,7 @@
 import os
 
 # Full filesystem path to the project.
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bericht")
 
 # Name of the directory for the project.
 PROJECT_DIRNAME = PROJECT_ROOT.split(os.sep)[-1]
@@ -41,7 +41,7 @@ ROOT_URLCONF = "%s.urls" % PROJECT_DIRNAME
 # or "C:/www/django/templates".
 # Always use forward slashes, even on Windows.
 # Don't forget to use absolute paths, not relative paths.
-TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "theme/templates"),)
+TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, "/theme/templates"),)
 JSTEMPLATE_DIRS = [os.path.join(d, 'mustache') for d in TEMPLATE_DIRS]
 
 ####################
@@ -251,12 +251,12 @@ INSTALLED_APPS = (
     "rest_framework",
     "jstemplate",
 
-    "bericht.entry",
+    "bericht.apps.entry",
+    "bericht.apps.voting",
+    "bericht.apps.aggregator",
+    "bericht.apps.artex",
+    "bericht.apps.article",
     "bericht.theme",
-    "bericht.voting",
-    "bericht.aggregator",
-    "bericht.artex",
-    "bericht.article",
     "bericht.utils",
 
     "mezzanine.boot",

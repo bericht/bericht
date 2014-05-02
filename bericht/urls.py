@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from article.views import ArticlesView
-from entry.views import VotesView
+from apps.article.views import ArticlesView
+from apps.entry.views import VotesView
 
 admin.autodiscover()
 
@@ -16,21 +16,23 @@ urlpatterns = patterns(
     # admin interface, which would be marginally more secure.
     ("^admin/", include(admin.site.urls)),
 
-    url("^$", "bericht.entry.views.frontpage", name='home'),
+    url("^$", "bericht.apps.entry.views.frontpage", name='home'),
 
     url("^api/articles/$", ArticlesView.as_view(), name='articles-view'),
 
-    url("^backend/articles/$", "bericht.article.views.article_list",
+    url("^backend/articles/$", "bericht.apps.article.views.article_list",
         name='backend-articles'),
-    url("^backend/articles/hidden/$", "bericht.article.views.article_list",
+    url("^backend/articles/hidden/$",
+        "bericht.apps.article.views.article_list",
         {'public': 'f'}, name='backend-articles-hidden'),
-    url("^backend/articles/public/$", "bericht.article.views.article_list",
+    url("^backend/articles/public/$",
+        "bericht.apps.article.views.article_list",
         {'public': 't'}, name='backend-articles-public'),
 
     url("^api/votes/(?P<entry_id>\d+)(?:/(?P<vote>yes|no|veto|abstain))?/$",
         VotesView.as_view(), name='votes-view'),
 
-    url(r'(?P<article_id>\d+)/$', "bericht.article.views.article_detail",
+    url(r'(?P<article_id>\d+)/$', "bericht.apps.article.views.article_detail",
         name='article-detail'),
 
     # MEZZANINE'S URLS

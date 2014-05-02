@@ -5,8 +5,10 @@ from django_behave import runner
 
 os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = 'localhost:9090'
 
+
 class AcceptanceTestSuiteRunner(runner.DjangoBehaveTestSuiteRunner):
     def build_suite(self, test_labels, extra_tests=None, **kwargs):
+        #test_labels = ["bericht.apps.%s" % l for l in test_labels]
         suite = super(self.__class__, self).build_suite(
             test_labels, extra_tests, **kwargs)
         suite_without_unittests = unittest.TestSuite()

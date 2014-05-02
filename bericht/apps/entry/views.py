@@ -5,8 +5,8 @@ from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, HttpResponseForbidden, Http404
 from voting.models import Vote
 
-from bericht.article.models import Article
-from bericht.entry.models import Entry
+from ..article.models import Article
+from ..entry.models import Entry
 
 
 class VotesView(APIView):

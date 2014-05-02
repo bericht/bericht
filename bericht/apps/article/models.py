@@ -8,7 +8,7 @@ from taggit.managers import TaggableManager
 
 from mezzanine.generic.fields import CommentsField
 
-from bericht.entry.models import Entry
+from ..entry.models import Entry
 
 logger = logging.getLogger(__name__)
 
