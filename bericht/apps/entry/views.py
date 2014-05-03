@@ -3,8 +3,8 @@ from mezzanine.utils.views import render, paginate
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, HttpResponseForbidden, Http404
-from voting.models import Vote
 
+from ..voting.models import Vote
 from ..article.models import Article
 from ..entry.models import Entry
 
