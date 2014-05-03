@@ -10,7 +10,7 @@ from django.test import TestCase
 from django.conf import settings
 from django.template.defaultfilters import slugify
 
-from aggregator.models import FeedFile, Feed, FeedItem
+from .models import FeedFile, Feed, FeedItem
 
 
 class FeedFileTest(TestCase):
@@ -20,7 +20,7 @@ class FeedFileTest(TestCase):
     """
     def setUp(self):
         fixtures_dir = os.path.join(settings.PROJECT_ROOT,
-                                    'aggregator/fixtures/')
+                                    'apps/aggregator/fixtures/')
         self.d = test.Daemon(staticdir=fixtures_dir)
         self.valid_feed = os.path.join(fixtures_dir, 'django.rss')
 
@@ -125,7 +125,7 @@ class FeedTest(TestCase):
 
     def setUp(self):
         fixtures_dir = os.path.join(settings.PROJECT_ROOT,
-                                    'aggregator/fixtures/')
+                                    'apps/aggregator/fixtures/')
         self.d = test.Daemon(staticdir=fixtures_dir)
         self.valid_feed = os.path.join(fixtures_dir, 'django.rss')
         url = self.d.p('200:b<"%s"' % self.valid_feed)
