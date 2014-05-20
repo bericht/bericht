@@ -14,8 +14,8 @@ Scenario: Browse new articles
       | A short history of spam        |        1 | hidden |
       | Rename the Nobel for Economics |       10 | hidden |
     Then they should see an article with the following attributes
-      | title                   | source                                  | updated    | public | tags |
-      | A short history of spam | Le Monde diplomatique - English edition | 04/22/2014   | hidden | None |
+      | title                   | source                                  | updated   | public | tags |
+      | A short history of spam | Le Monde diplomatique - English edition | 4/22/2014 | hidden | None |
     When the user clicks on the link "Western Sahara resources"
     Then they should see an article with the following attributes
       | title                    | public |
