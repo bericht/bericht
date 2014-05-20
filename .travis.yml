@@ -21,4 +21,4 @@ before_script:
 
 script:
   - python manage.py test aggregator
-  - python manage.py test aggregator --testrunner=utils.test_runner.AcceptanceTestSuiteRunner
+  - python manage.py test aggregator --testrunner=bericht.utils.test_runner.AcceptanceTestSuiteRunner
