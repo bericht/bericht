@@ -73,6 +73,6 @@ Run unit tests for the ``aggregator`` app with::
 
 ...and acceptance tests with::
 
-  python manage.py test aggregator --testrunner=utils.test_runner.AcceptanceTestSuiteRunner
+  python manage.py test aggregator --testrunner=bericht.utils.test_runner.AcceptanceTestSuiteRunner
 
 A test suite for client-side javascript tests must yet be chosen.
