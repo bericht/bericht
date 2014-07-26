@@ -73,8 +73,11 @@
     pip: requirements={{code_root}}/requirements.txt virtualenv={{project_root}}/env/
     sudo_user: "{{project_name}}"
 
-  - name: Add production dependencies.
-    pip: requirements={{code_root}}/requirements/production.txt virtualenv={{project_root}}/env/
+  - name: Install psycopg (python postgres driver)
+    pip: name=psycopg2 version=2.5.3 virtualenv={{project_root}}/env/
+
+  - name: Install gunicorn
+    pip: name=gunicorn version=19.0.0 virtualenv={{project_root}}/env/
     notify:
       - restart gunicorn
 
