@@ -1,9 +1,9 @@
 [group:{{project_name}}]
-programs=gunicorn_{{project_name}}
+programs=gunicorn
 
-[program:gunicorn_{{project_name}}]
-command={{project_root}}/env/bin/gunicorn bericht.wsgi -c ../gunicorn.conf.py -p ../gunicorn.pid
-directory={{project_root}}/code/
+[program:gunicorn]
+command={{project_root}}/env/bin/gunicorn wsgi:application -c {{project_root}}/gunicorn.conf.py -p  {{project_root}}/gunicorn.pid
+directory={{project_root}}/code/bericht
 user={{project_name}}
 autostart=true
 autorestart=true
