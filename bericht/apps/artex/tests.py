@@ -9,38 +9,38 @@ import unittest
 from django.test import TestCase
 from django.conf import settings
 from lxml import etree
-from artex import Article
-import artex
+from bericht.apps.artex import (contains_text, cleanup, elem_content_to_string,
+                                extract_article)
 
 
 class ArticleTest(TestCase):
     """Tests for the article extraction from an HTML page. """
     def setUp(self):
         self.fixtures_dir = os.path.join(settings.PROJECT_ROOT,
-                                         'artex/fixtures/')
+                                         'apps/artex/fixtures/')
 
     def test_Artex_djangoblog(self):
         """Tests correct article extraction on a Djangoproject Blog post."""
         html_file = os.path.join(self.fixtures_dir, 'django-blogpost.html')
         html = open(html_file, 'r').read()
-        article = Article(html)
-        self.assertEqual(article.title, 'Security advisory: strip_tags safety')
-        self.assertEqual(article.content[:20], '<p>We\'ve received a ')
-        self.assertEqual(article.content[-10:], ', 2014</p>')
+        title, content = extract_article(html)
+        self.assertEqual(title, 'Security advisory: strip_tags safety')
+        self.assertEqual(content[:20], '<p>We\'ve received a ')
+        self.assertEqual(content[-10:], ', 2014</p>')
 
     def test_Artex_wordpress(self):
         """Tests correct article extraction on a WordPress.org blog post."""
         html_file = os.path.join(self.fixtures_dir, 'wordpress-blogpost.html')
         html = open(html_file, 'r').read()
-        article = Article(html)
-        self.assertEqual(article.title, u'WordPress 3.8 “Parker”')
-        self.assertEqual(article.content[:20], '<p>Version 3.8 of Wo')
-        self.assertEqual(article.content[-20:], 'for version 3.9!</p>')
+        title, content = extract_article(html)
+        self.assertEqual(title, u'WordPress 3.8 “Parker”')
+        self.assertEqual(content[:20], '<p>Version 3.8 of Wo')
+        self.assertEqual(content[-20:], 'for version 3.9!</p>')
 
     def test_contains_text_before_p(self):
         """Tests that text in the outer div before a p is retained."""
         html = '<div>this is valuable text<p>and here is more</p></div>'
-        self.assertTrue(artex.contains_text(etree.fromstring(html)))
+        self.assertTrue(contains_text(etree.fromstring(html)))
 
     def test_contains_text_between_p(self):
         """Tests that text in the outer div before a p is retained."""
@@ -48,12 +48,12 @@ class ArticleTest(TestCase):
         <div><p>This is text. </p>This is valuable text<p>and
         here is more</p></div>
         '''
-        self.assertTrue(artex.contains_text(etree.fromstring(html)))
+        self.assertTrue(contains_text(etree.fromstring(html)))
 
     def test_contains_text_after_p(self):
         """Tests that text in the outer div before a p is retained."""
         html = '<div><p>This is text. </p>This is valuable text.</div>'
-        self.assertTrue(artex.contains_text(etree.fromstring(html)))
+        self.assertTrue(contains_text(etree.fromstring(html)))
 
     def test_cleanup_and_text_between_children(self):
         """
@@ -62,8 +62,8 @@ class ArticleTest(TestCase):
         """
         html = '<div>text <p>text </p>text <p>text </p>text</div>'
         target = 'text <p>text </p>text <p>text </p>text'
-        self.assertEqual(artex.elem_content_to_string(
-            artex.cleanup(etree.fromstring(html))), target)
+        self.assertEqual(elem_content_to_string(
+            cleanup(etree.fromstring(html))), target)
 
     def test_title_handling(self):
         """
@@ -81,10 +81,10 @@ class ArticleTest(TestCase):
         </body></html>
         '''
         title = 'Blog Post'
-        article = Article(html, title)
+        article_title, content = extract_article(html, title)
         self.assertEqual('<p>This is the main text to be extracted.</p>',
-                         article.content)
-        self.assertEqual(title, article.title)
+                         content)
+        self.assertEqual(title, article_title)
 
     def test_elem_without_text(self):
         """
@@ -109,10 +109,10 @@ class ArticleTest(TestCase):
         </div>
         </div>
         """
-        artex.cleanup(etree.fromstring(html))
+        cleanup(etree.fromstring(html))
         start = '<img src="'
         end = 'om</a></p>'
-        self.assertEqual(artex.elem_content_to_string(
-            artex.cleanup(etree.fromstring(html)))[:10], start)
-        self.assertEqual(artex.elem_content_to_string(
-            artex.cleanup(etree.fromstring(html)))[-10:], end)
+        self.assertEqual(elem_content_to_string(
+            cleanup(etree.fromstring(html)))[:10], start)
+        self.assertEqual(elem_content_to_string(
+            cleanup(etree.fromstring(html)))[-10:], end)
