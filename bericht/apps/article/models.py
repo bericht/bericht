@@ -9,6 +9,7 @@ from taggit.managers import TaggableManager
 from mezzanine.generic.fields import CommentsField
 
 from ..entry.models import Entry
+from ..artex import extract_article
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,8 @@ class ImportedArticle(Article):
             return
 
         self.link_html = req.content
-        # @TODO add article extraction here
+        self.title, self.content = extract_article(self.link_html, self.title)
+
         self.save()
 
     @classmethod
