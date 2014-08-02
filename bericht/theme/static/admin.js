@@ -207,7 +207,8 @@ var register_handlebar_helpers = function() {
     });
 
     Handlebars.registerHelper('formatDate', function(date) {
+        date = new Date(Date.parse(date));
         return new Handlebars.SafeString(
-            (new Date(Date.parse(date))).toLocaleDateString());
+            date.toLocaleDateString(window.bericht.language));
     });
 };
