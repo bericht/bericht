@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from apps.article.views import ArticlesView
-from apps.entry.views import VotesView
+from .apps.article.views import ArticlesView
+from .apps.entry.views import VotesView
 
 admin.autodiscover()
 
