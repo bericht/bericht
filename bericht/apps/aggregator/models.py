@@ -7,7 +7,7 @@ import requests
 import feedparser
 from taggit.managers import TaggableManager
 from lxml.html.clean import clean_html
-from lxml.html.soupparser import fromstring
+from bs4 import BeautifulSoup
 from lxml.etree import tostring
 
 from django.conf import settings
@@ -43,7 +43,7 @@ def create_article(sender, **kwargs):
 # @TODO Uses a blacklist by default, we might want to replace that with a
 # whitelist.
 def sanitize(html):
-    return tostring(clean_html(fromstring(html)))
+    return tostring(clean_html(BeautifulSoup(html)))
 
 
 def parse_time(time_struct):
