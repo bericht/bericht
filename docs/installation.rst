@@ -3,10 +3,11 @@ Installation Instructions
 
 Bericht is currently written in python 2, because mezzanine has not
 been ported to python 3 so far. So you need at least python 2 (including
-development headers) and pip, pythons package manager. On Debian(-based)
+development headers) and pip, pythons package manager as well as two
+libraries for xml-parsing, libxml and libxslt. On Debian(-based)
 systems the following should  be sufficient:::
 
-  apt-get install python python-dev python-pip
+  apt-get install python python-dev python-pip libxml2-dev libxslt-dev
 
 .. TIP::
    Usage of `virtualenv <https://pypi.python.org/pypi/virtualenv>`_ is strongly
@@ -47,4 +48,3 @@ tested to run on debian stable and included in ``deploy/``. Change ``bericht.dev
 in ``deploy/hosts`` to the IP or hostname of your debian server and run::
 
   ansible-playbook -i deploy/hosts -K deploy/site.yml
-
