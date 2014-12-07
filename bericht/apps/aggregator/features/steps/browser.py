@@ -1,5 +1,5 @@
 from time import sleep
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from behave import given, when, then
 from django.core.management import call_command
