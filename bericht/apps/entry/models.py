@@ -13,7 +13,9 @@ class Entry(PolymorphicModel):
         the criteria for public Entries.
         """
         votes = Vote.objects.get_votes(self)
-        if votes['NO'] < 10 and votes['VETO'] < 1 and votes['YES'] >= 10:
+        if votes.get('NO', 0) < 10 and \
+           votes.get('VETO', 0) < 1 and \
+           votes.get('YES', 0) >= 10:
             return True
         else:
             return False

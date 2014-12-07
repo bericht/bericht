@@ -14,9 +14,7 @@ class VoteManager(models.Manager):
             content_type=ctype
         ).values('vote').annotate(number=Count('vote'))
 
-        defaults = {i: 0 for i in self.model.VOTE_IDS}
-        return dict(defaults.items() +
-                    {i['vote']: i['number'] for i in result}.items())
+        return {i['vote']: i['number'] for i in result}
 
     def record_vote(self, obj, user, vote):
         """
