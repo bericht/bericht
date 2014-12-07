@@ -1,10 +1,10 @@
 language: python
 
 env:
-- DJANGO_VERSION=1.6.2 PYTHONPATH=$HOME/build/bericht
+- DJANGO_VERSION=1.7.1 PYTHONPATH=$HOME/build/bericht
 
 python:
-  - "2.7"
+  - "3.4"
 
 before_install:
   - "export DISPLAY=:99.0"
