@@ -126,7 +126,7 @@ class FeedFile(models.Model):
         filepath = os.path.join(directory, filename)
         if not os.path.isdir(directory):
             os.makedirs(directory)
-        with open(filepath, "w") as f:
+        with open(filepath, "wb") as f:
             f.write(content)
 
     @classmethod
