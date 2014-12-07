@@ -1,5 +1,5 @@
 -e git://github.com/bericht/python-readability.git#egg=readability-lxml
--e git://github.com/dgreisen-cfpb/django-behave.git#egg=django-behave
+-e git://github.com/django-behave/django-behave.git#egg=django-behave
 Django==1.7.1
 Mezzanine==3.1.10
 Pillow==2.6.1
