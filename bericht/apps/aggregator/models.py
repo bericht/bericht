@@ -6,9 +6,7 @@ from datetime import datetime
 import requests
 import feedparser
 from taggit.managers import TaggableManager
-from lxml.html.clean import clean_html
 from bs4 import BeautifulSoup
-from lxml.etree import tostring
 
 from django.conf import settings
 from django.db import models
@@ -23,6 +21,10 @@ logger = logging.getLogger(__name__)
 fetched_feed_file = Signal()
 parsed_item = Signal(providing_args=['entry'])
 saved_feeditem = Signal()
+
+
+TAG_WHITELIST = ['strong', 'em', 'p', 'ul', 'li',
+                 'br', 'img', 'audio', 'video']
 
 
 @receiver(fetched_feed_file)
@@ -40,10 +42,13 @@ def create_article(sender, **kwargs):
     ImportedArticle.from_feeditem(sender)
 
 
-# @TODO Uses a blacklist by default, we might want to replace that with a
-# whitelist.
+# @TODO strip attributes (onlclick, etc) and review whitelist.
 def sanitize(html):
-    return tostring(clean_html(BeautifulSoup(html)))
+    soup = BeautifulSoup(html)
+    for tag in soup.findAll(True):
+        if tag.name not in TAG_WHITELIST:
+            tag.hidden = True
+    return soup.renderContents()
 
 
 def parse_time(time_struct):
