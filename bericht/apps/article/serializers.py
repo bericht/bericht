@@ -4,12 +4,12 @@ from ..voting.models import Vote
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    slug = serializers.CharField(source='slug', read_only=True)
+    slug = serializers.CharField(read_only=True)
     source = serializers.SerializerMethodField('get_source_info')
     tags = serializers.CharField(source='tags.names', read_only=True)
-    is_public = serializers.CharField(source='is_public', read_only=True)
-    votes = serializers.SerializerMethodField('get_votes')
-    user_vote = serializers.SerializerMethodField('get_user_vote')
+    is_public = serializers.CharField(read_only=True)
+    votes = serializers.SerializerMethodField()
+    user_vote = serializers.SerializerMethodField()
 
     class Meta:
         model = Article
